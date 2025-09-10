@@ -1,11 +1,9 @@
 import {
   beginDrawing,
-  Black,
   clearBackground,
   closeWindow,
   drawRectangle,
   drawRectangleRec,
-  drawText,
   endDrawing,
   getFrameTime,
   getScreenHeight,
@@ -64,6 +62,18 @@ car.x = getScreenWidth();
 car.y = getScreenHeight() / 2 - 8;
 const carSpeed = 30;
 
+// async function* shouldClose() {
+//   while (true) {
+//     await new Promise((r) => setTimeout(r, 16));
+//     yield windowShouldClose();
+//   }
+// }
+
+// for await (const close of shouldClose()) {
+//   if (close) {
+//     break;
+//   }
+
 while (windowShouldClose() === false) {
   // Update
   // --------------------------------------------------------------------------
@@ -84,7 +94,11 @@ while (windowShouldClose() === false) {
   }
 
   // Car update
-  car.x -= carSpeed * deltaTime;
+  if (car.x < -16) {
+    car.x = getScreenWidth();
+  } else {
+    car.x -= carSpeed * deltaTime;
+  }
 
   // Draw
   // --------------------------------------------------------------------------
@@ -102,29 +116,13 @@ while (windowShouldClose() === false) {
     color: Green,
   });
 
+  // Car
   drawRectangleRec({
     x: car.x,
     y: car.y,
     height: 16,
     width: 16,
   }, Red);
-
-  // Car
-  // drawRectangle({
-  //   width: 16,
-  //   height: 16,
-  //   posX: car.x,
-  //   posY: car.y,
-  //   color: Red,
-  // });
-
-  drawText({
-    text: "Frogger!",
-    fontSize: 24,
-    posX: 0,
-    posY: 0,
-    color: Black,
-  });
 
   endDrawing();
 }
