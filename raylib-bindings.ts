@@ -270,15 +270,15 @@ const raylib = Deno.dlopen("./lib/libraylib.so.5.5.0", {
 });
 
 const cEncoder = new TextEncoder();
-function toCString(str: string): Uint8Array {
+function toCString(str: string): BufferSource {
   return cEncoder.encode(`${str}\0`);
 }
 
-function toUint8Array(arr: number[]): Uint8Array {
+function toUint8Array(arr: number[]): BufferSource {
   return new Uint8Array(arr);
 }
 
-function toCamera2DArray(camera: Camera): Float32Array {
+function toCamera2DArray(camera: Camera): BufferSource {
   return new Float32Array([
     camera.offset.x,
     camera.offset.y,
@@ -289,7 +289,7 @@ function toCamera2DArray(camera: Camera): Float32Array {
   ]);
 }
 
-function toFloat32Array(arr: number[]): Float32Array {
+function toFloat32Array(arr: number[]): BufferSource {
   return new Float32Array(arr);
 }
 
