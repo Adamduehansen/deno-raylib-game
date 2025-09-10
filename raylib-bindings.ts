@@ -150,6 +150,10 @@ const raylib = Deno.dlopen("./lib/libraylib.so.5.5.0", {
     parameters: [],
     result: "i32",
   },
+  GetFrameTime: {
+    parameters: [],
+    result: "f32",
+  },
   GetCurrentMonitor: {
     parameters: [],
     result: "i32",
@@ -546,7 +550,7 @@ export function endMode2D(): void {
   raylib.symbols.EndMode2D();
 }
 
-// Timing related functions
+// Timing-related functions
 // ----------------------------------------------------------------------------
 export function setTargetFPS(fps: number): void {
   raylib.symbols.SetTargetFPS(fps);
@@ -554,6 +558,10 @@ export function setTargetFPS(fps: number): void {
 
 export function getFPS(): number {
   return raylib.symbols.GetFPS();
+}
+
+export function getFrameTime(): number {
+  return raylib.symbols.GetFrameTime();
 }
 
 // Input related functions: keyboard

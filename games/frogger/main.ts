@@ -4,8 +4,10 @@ import {
   clearBackground,
   closeWindow,
   drawRectangle,
+  drawRectangleRec,
   drawText,
   endDrawing,
+  getFrameTime,
   getScreenHeight,
   getScreenWidth,
   Green,
@@ -16,6 +18,7 @@ import {
   KeyS,
   KeyW,
   RayWhite,
+  Red,
   setTargetFPS,
   windowShouldClose,
 } from "../../raylib-bindings.ts";
@@ -33,6 +36,14 @@ abstract class Entity {
 class Frog extends Entity {
 }
 
+class Car extends Entity {
+  constructor(args: {
+    type: "A" | "B" | "C" | "D" | "E";
+  }) {
+    super();
+  }
+}
+
 initWindow({
   title: "Frogger",
   height: 260,
@@ -46,9 +57,20 @@ frog.x = getScreenWidth() / 2 - 8;
 frog.y = getScreenHeight() / 2 - 8;
 const frogSpeed = 1;
 
+const car = new Car({
+  type: "A",
+});
+car.x = getScreenWidth();
+car.y = getScreenHeight() / 2 - 8;
+const carSpeed = 30;
+
 while (windowShouldClose() === false) {
   // Update
   // --------------------------------------------------------------------------
+
+  const deltaTime = getFrameTime();
+
+  // Frog update
   if (isKeyDown(KeyA)) {
     frog.x -= frogSpeed;
   } else if (isKeyDown(KeyD)) {
@@ -61,6 +83,9 @@ while (windowShouldClose() === false) {
     frog.y += frogSpeed;
   }
 
+  // Car update
+  car.x -= carSpeed * deltaTime;
+
   // Draw
   // --------------------------------------------------------------------------
 
@@ -68,6 +93,7 @@ while (windowShouldClose() === false) {
 
   clearBackground(RayWhite);
 
+  // Frog
   drawRectangle({
     width: 16,
     height: 16,
@@ -75,6 +101,22 @@ while (windowShouldClose() === false) {
     posY: frog.y,
     color: Green,
   });
+
+  drawRectangleRec({
+    x: car.x,
+    y: car.y,
+    height: 16,
+    width: 16,
+  }, Red);
+
+  // Car
+  // drawRectangle({
+  //   width: 16,
+  //   height: 16,
+  //   posX: car.x,
+  //   posY: car.y,
+  //   color: Red,
+  // });
 
   drawText({
     text: "Frogger!",
