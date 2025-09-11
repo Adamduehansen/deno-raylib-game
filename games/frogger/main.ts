@@ -32,6 +32,8 @@ abstract class Entity {
     this.color = RayWhite;
   }
 
+  abstract update(): void;
+
   render() {
     drawRectangleRec({
       x: this.x,
@@ -47,12 +49,36 @@ class Frog extends Entity {
     super();
     this.color = Green;
   }
+
+  override update(): void {
+    if (isKeyPressed(KeyA)) {
+      frog.x -= GridSize;
+    } else if (isKeyPressed(KeyD)) {
+      frog.x += GridSize;
+    }
+
+    if (isKeyPressed(KeyW)) {
+      frog.y -= GridSize;
+    } else if (isKeyPressed(KeyS)) {
+      frog.y += GridSize;
+    }
+  }
 }
 
 class Car extends Entity {
   constructor() {
     super();
     this.color = Red;
+  }
+
+  override update(): void {
+    const deltaTime = getFrameTime();
+
+    if (this.x < -GridSize) {
+      this.x = getScreenWidth();
+    } else {
+      this.x -= carSpeed * deltaTime;
+    }
   }
 }
 
@@ -106,38 +132,8 @@ while (windowShouldClose() === false) {
   // Update
   // --------------------------------------------------------------------------
 
-  const deltaTime = getFrameTime();
-
-  // Frog update
-  if (isKeyPressed(KeyA)) {
-    frog.x -= GridSize;
-  } else if (isKeyPressed(KeyD)) {
-    frog.x += GridSize;
-  }
-
-  if (isKeyPressed(KeyW)) {
-    frog.y -= GridSize;
-  } else if (isKeyPressed(KeyS)) {
-    frog.y += GridSize;
-  }
-
-  // Car update
-  if (car1.x < -GridSize) {
-    car1.x = getScreenWidth();
-  } else {
-    car1.x -= carSpeed * deltaTime;
-  }
-
-  if (car2.x < -GridSize) {
-    car2.x = getScreenWidth();
-  } else {
-    car2.x -= carSpeed * deltaTime;
-  }
-
-  if (car3.x < -GridSize) {
-    car3.x = getScreenWidth();
-  } else {
-    car3.x -= carSpeed * deltaTime;
+  for (const entity of entities) {
+    entity.update();
   }
 
   // Draw
