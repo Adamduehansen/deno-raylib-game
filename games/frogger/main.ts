@@ -87,7 +87,7 @@ const GridSize = 16;
 initWindow({
   title: "Frogger",
   height: 240,
-  width: 176,
+  width: 240,
 });
 
 setTargetFPS(60);
@@ -105,12 +105,12 @@ car1.y = getScreenHeight() - GridSize * 2;
 entities.push(car1);
 
 const car2 = new Car();
-car2.x = getScreenWidth() - GridSize * 5;
+car2.x = getScreenWidth() - GridSize * 6;
 car2.y = getScreenHeight() - GridSize * 2;
 entities.push(car2);
 
 const car3 = new Car();
-car3.x = getScreenWidth() - GridSize * 9;
+car3.x = getScreenWidth() - GridSize * 11;
 car3.y = getScreenHeight() - GridSize * 2;
 entities.push(car3);
 
