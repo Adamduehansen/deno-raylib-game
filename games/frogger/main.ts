@@ -65,19 +65,34 @@ class Frog extends Entity {
   }
 }
 
+interface CarArgs {
+  direction: "left" | "right";
+}
+
 class Car extends Entity {
-  constructor() {
+  direction: CarArgs["direction"] = "left";
+
+  constructor(args: CarArgs) {
     super();
     this.color = Red;
+    this.direction = args.direction;
   }
 
   override update(): void {
     const deltaTime = getFrameTime();
 
-    if (this.x < -GridSize) {
-      this.x = getScreenWidth();
+    if (this.direction === "left") {
+      if (this.x < -GridSize) {
+        this.x = getScreenWidth();
+      } else {
+        this.x -= carSpeed * deltaTime;
+      }
     } else {
-      this.x -= carSpeed * deltaTime;
+      if (this.x > getScreenWidth()) {
+        this.x = -GridSize;
+      } else {
+        this.x += carSpeed * deltaTime;
+      }
     }
   }
 }
@@ -99,20 +114,33 @@ frog.x = 0;
 frog.y = getScreenHeight() - GridSize;
 entities.push(frog);
 
-const car1 = new Car();
-car1.x = getScreenWidth() - GridSize;
-car1.y = getScreenHeight() - GridSize * 2;
-entities.push(car1);
+const row1Car1 = new Car({
+  direction: "left",
+});
+row1Car1.x = getScreenWidth() - GridSize;
+row1Car1.y = getScreenHeight() - GridSize * 2;
+entities.push(row1Car1);
 
-const car2 = new Car();
-car2.x = getScreenWidth() - GridSize * 6;
-car2.y = getScreenHeight() - GridSize * 2;
-entities.push(car2);
+const row1Car2 = new Car({
+  direction: "left",
+});
+row1Car2.x = getScreenWidth() - GridSize * 6;
+row1Car2.y = getScreenHeight() - GridSize * 2;
+entities.push(row1Car2);
 
-const car3 = new Car();
-car3.x = getScreenWidth() - GridSize * 11;
-car3.y = getScreenHeight() - GridSize * 2;
-entities.push(car3);
+const row1Car3 = new Car({
+  direction: "left",
+});
+row1Car3.x = getScreenWidth() - GridSize * 11;
+row1Car3.y = getScreenHeight() - GridSize * 2;
+entities.push(row1Car3);
+
+const row2Car1 = new Car({
+  direction: "right",
+});
+row2Car1.x = -GridSize;
+row2Car1.y = getScreenHeight() - GridSize * 3;
+entities.push(row2Car1);
 
 const carSpeed = 30;
 
