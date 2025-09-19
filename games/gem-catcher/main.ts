@@ -3,6 +3,7 @@ import {
   closeWindow,
   drawTexture,
   endDrawing,
+  getFrameTime,
   getScreenHeight,
   getScreenWidth,
   initWindow,
@@ -27,6 +28,9 @@ const PaddleWidth = 104;
 
 const bgTexture = loadTexture("./games/gem-catcher/assets/GameBg.png");
 const paddleTexture = loadTexture("./games/gem-catcher/assets/paddleBlu.png");
+const starTexture = loadTexture(
+  "./games/gem-catcher/assets/element_red_diamond.png",
+);
 
 setTargetFPS(60);
 
@@ -36,7 +40,6 @@ interface Vector {
 }
 
 interface EntityArgs {
-  pos: Vector;
   texture: Texture;
 }
 
@@ -45,7 +48,10 @@ abstract class Entity {
   texture: Texture;
 
   constructor(args: EntityArgs) {
-    this.pos = args.pos;
+    this.pos = {
+      x: 0,
+      y: 0,
+    };
     this.texture = args.texture;
   }
 
@@ -61,23 +67,47 @@ abstract class Entity {
   abstract update(): void;
 }
 
-const PlayerPaddleSpeed = 10;
-
 class PlayerPaddle extends Entity {
+  readonly #speed: number = 10;
+
+  constructor() {
+    super({
+      texture: paddleTexture,
+    });
+  }
+
   override update(): void {
     if (
       isKeyDown(KeyD) && this.pos.x < getScreenWidth() - this.texture.width
     ) {
-      this.pos.x += PlayerPaddleSpeed;
+      this.pos.x += this.#speed;
     }
     if (isKeyDown(KeyA) && this.pos.x > 0) {
-      this.pos.x -= PlayerPaddleSpeed;
+      this.pos.x -= this.#speed;
     }
   }
 }
 
 class Background extends Entity {
+  constructor() {
+    super({
+      texture: bgTexture,
+    });
+  }
+
   override update(): void {}
+}
+
+class Star extends Entity {
+  constructor() {
+    super({
+      texture: starTexture,
+    });
+  }
+
+  override update(): void {
+    this.pos.y += 5;
+  }
 }
 
 class World {
@@ -93,27 +123,33 @@ class World {
 }
 
 const world = new World();
-const background = new Background({
-  pos: {
-    x: 0,
-    y: 0,
-  },
-  texture: bgTexture,
-});
-world.add(background);
-const playerPaddle = new PlayerPaddle({
-  pos: {
-    x: getScreenWidth() / 2 - PaddleWidth / 2,
-    y: getScreenHeight() - 50,
-  },
-  texture: paddleTexture,
-});
 
+const background = new Background();
+background.pos.x = 0;
+background.pos.y = 0;
+world.add(background);
+
+const playerPaddle = new PlayerPaddle();
+playerPaddle.pos.x = getScreenWidth() / 2 - PaddleWidth / 2;
+playerPaddle.pos.y = getScreenHeight() - 50;
 world.add(playerPaddle);
+
+let starSpawnTimer = 0;
 
 while (windowShouldClose() === false) {
   // Update
   // --------------------------------------------------------------------------
+  const frameTime = getFrameTime();
+  starSpawnTimer += frameTime;
+  if (starSpawnTimer > 1) {
+    const star = new Star();
+    star.pos.y = -starTexture.height;
+    const x = Math.floor(Math.random() * getScreenWidth() - starTexture.width);
+    star.pos.x = x;
+    world.add(star);
+    starSpawnTimer = 0;
+  }
+
   for (const entity of world.entities) {
     entity.update();
   }
