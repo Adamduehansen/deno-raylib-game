@@ -396,7 +396,7 @@ interface Font {
   glyphs: number; // pointer
 }
 
-interface Texture {
+export interface Texture {
   id: number;
   width: number;
   height: number;

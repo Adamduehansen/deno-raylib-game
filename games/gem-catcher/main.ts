@@ -11,6 +11,7 @@ import {
   KeyD,
   loadTexture,
   setTargetFPS,
+  Texture,
   unloadTexture,
   White,
   windowShouldClose,
@@ -36,17 +37,28 @@ interface Vector {
 
 interface EntityArgs {
   pos: Vector;
+  texture: Texture;
 }
 
 abstract class Entity {
   pos: Vector;
+  texture: Texture;
 
   constructor(args: EntityArgs) {
     this.pos = args.pos;
+    this.texture = args.texture;
+  }
+
+  render(): void {
+    drawTexture({
+      texture: this.texture,
+      x: this.pos.x,
+      y: this.pos.y,
+      color: White,
+    });
   }
 
   abstract update(): void;
-  abstract render(): void;
 }
 
 const PlayerPaddleSpeed = 10;
@@ -54,7 +66,7 @@ const PlayerPaddleSpeed = 10;
 class PlayerPaddle extends Entity {
   override update(): void {
     if (
-      isKeyDown(KeyD) && this.pos.x < getScreenWidth() - paddleTexture.width
+      isKeyDown(KeyD) && this.pos.x < getScreenWidth() - this.texture.width
     ) {
       this.pos.x += PlayerPaddleSpeed;
     }
@@ -62,28 +74,10 @@ class PlayerPaddle extends Entity {
       this.pos.x -= PlayerPaddleSpeed;
     }
   }
-
-  override render(): void {
-    drawTexture({
-      texture: paddleTexture,
-      x: this.pos.x,
-      y: this.pos.y,
-      color: White,
-    });
-  }
 }
 
 class Background extends Entity {
   override update(): void {}
-
-  override render(): void {
-    drawTexture({
-      texture: bgTexture,
-      x: this.pos.x,
-      y: this.pos.y,
-      color: White,
-    });
-  }
 }
 
 class World {
@@ -104,6 +98,7 @@ const background = new Background({
     x: 0,
     y: 0,
   },
+  texture: bgTexture,
 });
 world.add(background);
 const playerPaddle = new PlayerPaddle({
@@ -111,6 +106,7 @@ const playerPaddle = new PlayerPaddle({
     x: getScreenWidth() / 2 - PaddleWidth / 2,
     y: getScreenHeight() - 50,
   },
+  texture: paddleTexture,
 });
 
 world.add(playerPaddle);
