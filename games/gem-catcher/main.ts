@@ -73,6 +73,19 @@ class PlayerPaddle extends Entity {
   }
 }
 
+class Background extends Entity {
+  override update(): void {}
+
+  override render(): void {
+    drawTexture({
+      texture: bgTexture,
+      x: this.pos.x,
+      y: this.pos.y,
+      color: White,
+    });
+  }
+}
+
 class World {
   #entities: Entity[] = [];
 
@@ -86,6 +99,13 @@ class World {
 }
 
 const world = new World();
+const background = new Background({
+  pos: {
+    x: 0,
+    y: 0,
+  },
+});
+world.add(background);
 const playerPaddle = new PlayerPaddle({
   pos: {
     x: getScreenWidth() / 2 - PaddleWidth / 2,
@@ -105,17 +125,9 @@ while (windowShouldClose() === false) {
   // Drawing
   // --------------------------------------------------------------------------
   beginDrawing();
-  drawTexture({
-    texture: bgTexture,
-    x: 0,
-    y: 0,
-    color: White,
-  });
-
   for (const entity of world.entities) {
     entity.render();
   }
-
   endDrawing();
 }
 
