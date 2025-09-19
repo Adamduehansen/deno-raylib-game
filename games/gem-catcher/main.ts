@@ -1,6 +1,7 @@
 import {
   beginDrawing,
   closeWindow,
+  drawText,
   drawTexture,
   endDrawing,
   getFrameTime,
@@ -47,7 +48,10 @@ interface EntityArgs {
 abstract class Entity {
   pos: Vector;
   texture: Texture;
-  name: string;
+
+  readonly name: string;
+  readonly id: string;
+
   world?: World;
 
   constructor(args: EntityArgs) {
@@ -57,6 +61,7 @@ abstract class Entity {
     };
     this.name = args.name;
     this.texture = args.texture;
+    this.id = crypto.randomUUID();
   }
 
   render(): void {
@@ -66,6 +71,10 @@ abstract class Entity {
       y: this.pos.y,
       color: White,
     });
+  }
+
+  destroy() {
+    this.world?.remove(this);
   }
 
   abstract update(): void;
@@ -114,6 +123,10 @@ class Star extends Entity {
 
   override update(): void {
     this.pos.y += 5;
+
+    if (this.pos.y > getScreenHeight()) {
+      this.destroy();
+    }
   }
 }
 
@@ -127,6 +140,12 @@ class World {
   add(entity: Entity): void {
     this.#entities.push(entity);
     entity.world = this;
+  }
+
+  remove(entityToRemove: Entity): void {
+    this.#entities = this.#entities.filter((entity) =>
+      entity.id !== entityToRemove.id
+    );
   }
 }
 
@@ -168,6 +187,22 @@ while (windowShouldClose() === false) {
   for (const entity of world.entities) {
     entity.render();
   }
+  drawText({
+    text: `Amount of stars: ${
+      world.entities.filter((entity) => entity.name === "Star").length
+    }`,
+    color: White,
+    fontSize: 24,
+    posX: 10,
+    posY: 10,
+  });
+  drawText({
+    text: `Toal amount of entities: ${world.entities.length}`,
+    color: White,
+    fontSize: 24,
+    posX: 10,
+    posY: 40,
+  });
   endDrawing();
 }
 
