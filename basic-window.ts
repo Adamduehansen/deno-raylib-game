@@ -9,7 +9,7 @@ import {
   setTargetFPS,
   White,
   windowShouldClose,
-} from "./raylib-bindings.ts";
+} from "./src/raylib-bindings.ts";
 
 // Learn more at https://docs.deno.com/runtime/manual/examples/module_metadata#concepts
 if (import.meta.main) {
