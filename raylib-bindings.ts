@@ -44,6 +44,24 @@ const TextureStruct = {
   ],
 } as const;
 
+const AudioStreamStruct = {
+  struct: [
+    "u32", // sampleRate
+    "u32", // sampleSize
+    "u32", // channels
+    "u32", // bufferCount
+    "u32", // frameCount
+    "buffer", // data (void*)
+  ],
+} as const;
+
+export const SoundStruct = {
+  struct: [
+    AudioStreamStruct, // stream
+    "u32", // frameCount
+  ],
+} as const;
+
 const GlyphInfoStruct = {
   struct: [
     "i32", // value
@@ -214,6 +232,10 @@ const raylib = Deno.dlopen("./lib/libraylib.so.5.5.0", {
     parameters: [],
     result: "i16",
   },
+  InitAudioDevice: {
+    parameters: [],
+    result: "void",
+  },
   InitWindow: {
     parameters: ["i16", "i16", "buffer"],
     result: "void",
@@ -242,9 +264,17 @@ const raylib = Deno.dlopen("./lib/libraylib.so.5.5.0", {
     parameters: ["buffer"],
     result: TextureStruct,
   },
+  LoadSound: {
+    parameters: ["buffer"],
+    result: SoundStruct,
+  },
   MeasureText: {
     parameters: ["buffer", "i32"],
     result: "i32",
+  },
+  PlaySound: {
+    parameters: [SoundStruct],
+    result: "void",
   },
   rlPushMatrix: {
     parameters: [],
@@ -305,6 +335,26 @@ function toRaylibColor(arr: number[]): BufferSource {
   return toUint8Array(arr);
 }
 
+function toRaylibSound(sound: Sound): BufferSource {
+  // AudioStreamStruct: [sampleRate, sampleSize, channels, bufferCount, frameCount, data]
+  // SoundStruct: [AudioStreamStruct..., frameCount]
+  const buffer = new ArrayBuffer(32); // 6 * 4 bytes + 8 bytes (pointer) + 4 bytes (frameCount)
+  const view = new DataView(buffer);
+
+  // AudioStream fields
+  view.setUint32(0, sound.stream.sampleRate, true);
+  view.setUint32(4, sound.stream.sampleSize, true);
+  view.setUint32(8, sound.stream.channels, true);
+  view.setUint32(12, sound.stream.bufferCount, true);
+  view.setUint32(16, sound.stream.frameCount, true);
+  view.setBigUint64(20, BigInt(sound.stream.data), true); // pointer
+
+  // Sound.frameCount
+  view.setUint32(28, sound.frameCount, true);
+
+  return new Uint8Array(buffer);
+}
+
 function toCamera2DArray(camera: Camera): BufferSource {
   return new Float32Array([
     camera.offset.x,
@@ -361,6 +411,38 @@ function toRaylibTexture(texture: Texture): BufferSource {
   ]);
 }
 
+export function toSound(soundBuffer: Uint8Array): Sound {
+  // SoundStruct layout:
+  // [AudioStreamStruct (6 fields), frameCount (u32)]
+  // AudioStreamStruct: [sampleRate, sampleSize, channels, bufferCount, frameCount, data]
+  const buffer = soundBuffer.buffer;
+  const byteOffset = soundBuffer.byteOffset;
+  const view = new DataView(buffer, byteOffset, soundBuffer.byteLength);
+
+  // AudioStream fields (all u32 except data, which is a pointer)
+  const sampleRate = view.getUint32(0, true);
+  const sampleSize = view.getUint32(4, true);
+  const channels = view.getUint32(8, true);
+  const bufferCount = view.getUint32(12, true);
+  const streamFrameCount = view.getUint32(16, true);
+  const data = view.getBigUint64(20, true); // pointer (use getBigUint64 for 64-bit pointer)
+
+  // Sound.frameCount (u32)
+  const frameCount = view.getUint32(28, true);
+
+  return {
+    stream: {
+      sampleRate,
+      sampleSize,
+      channels,
+      bufferCount,
+      frameCount: streamFrameCount,
+      data: Number(data), // cast pointer to number
+    },
+    frameCount,
+  };
+}
+
 export interface Rectangle {
   x: number;
   y: number;
@@ -395,6 +477,20 @@ export interface Texture {
   height: number;
   mipmaps: number;
   format: number;
+}
+
+export interface AudioStream {
+  sampleRate: number;
+  sampleSize: number;
+  channels: number;
+  bufferCount: number;
+  frameCount: number;
+  data: number; // pointer
+}
+
+export interface Sound {
+  stream: AudioStream;
+  frameCount: number;
 }
 
 // Color constants
@@ -874,4 +970,19 @@ export function rlRotatef(
   z: number,
 ): void {
   raylib.symbols.rlRotatef(angle, x, y, z);
+}
+
+// Audio device management functions
+export function initAudioDevice(): void {
+  return raylib.symbols.InitAudioDevice();
+}
+
+// Wave/Sound loading/unloading functions
+export function loadSound(fileName: string): Sound {
+  return toSound(raylib.symbols.LoadSound(toCString(fileName)));
+}
+
+// Wave/Sound management functions
+export function playSound(sound: Sound): void {
+  return raylib.symbols.PlaySound(toRaylibSound(sound));
 }

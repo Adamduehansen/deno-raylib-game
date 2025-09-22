@@ -9,14 +9,17 @@ import {
   getFrameTime,
   getScreenHeight,
   getScreenWidth,
+  initAudioDevice,
   initWindow,
   isKeyDown,
   isKeyPressed,
   KeyA,
   KeyD,
   KeyP,
+  loadSound,
   loadTexture,
   measureText,
+  playSound,
   Rectangle,
   setTargetFPS,
   Texture,
@@ -24,22 +27,6 @@ import {
   White,
   windowShouldClose,
 } from "../../raylib-bindings.ts";
-
-initWindow({
-  title: "Gem Catcher",
-  width: 1152,
-  height: 648,
-});
-
-const PaddleWidth = 104;
-
-const bgTexture = loadTexture("./games/gem-catcher/assets/GameBg.png");
-const paddleTexture = loadTexture("./games/gem-catcher/assets/paddleBlu.png");
-const starTexture = loadTexture(
-  "./games/gem-catcher/assets/element_red_diamond.png",
-);
-
-setTargetFPS(60);
 
 let score = 0;
 let paused: boolean = false;
@@ -152,11 +139,13 @@ class Star extends Entity {
     );
     if (paddle !== undefined && this.hasCollidingWith(paddle)) {
       score += 1;
+      playSound(spellSound);
       this.destroy();
     }
 
     if (this.pos.y > getScreenHeight()) {
       gameOver = true;
+      playSound(explodeSound);
       this.destroy();
     }
   }
@@ -181,6 +170,25 @@ class World {
   }
 }
 
+initWindow({
+  title: "Gem Catcher",
+  width: 1152,
+  height: 648,
+});
+
+initAudioDevice();
+
+const spellSound = loadSound("./games/gem-catcher/assets/spell1_0.wav");
+const explodeSound = loadSound("./games/gem-catcher/assets/explode.wav");
+
+const bgTexture = loadTexture("./games/gem-catcher/assets/GameBg.png");
+const paddleTexture = loadTexture("./games/gem-catcher/assets/paddleBlu.png");
+const starTexture = loadTexture(
+  "./games/gem-catcher/assets/element_red_diamond.png",
+);
+
+setTargetFPS(60);
+
 const world = new World();
 
 const background = new Background();
@@ -189,6 +197,7 @@ background.pos.y = 0;
 world.add(background);
 
 const playerPaddle = new PlayerPaddle();
+const PaddleWidth = 104;
 playerPaddle.pos.x = getScreenWidth() / 2 - PaddleWidth / 2;
 playerPaddle.pos.y = getScreenHeight() - 50;
 world.add(playerPaddle);
