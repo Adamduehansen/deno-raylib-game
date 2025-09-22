@@ -16,6 +16,7 @@ import {
   KeyD,
   KeyP,
   loadTexture,
+  measureText,
   Rectangle,
   setTargetFPS,
   Texture,
@@ -42,6 +43,7 @@ setTargetFPS(60);
 
 let score = 0;
 let paused: boolean = false;
+let gameOver: boolean = false;
 
 interface Vector {
   x: number;
@@ -154,6 +156,7 @@ class Star extends Entity {
     }
 
     if (this.pos.y > getScreenHeight()) {
+      gameOver = true;
       this.destroy();
     }
   }
@@ -201,22 +204,26 @@ while (windowShouldClose() === false) {
 
   // Update
   // --------------------------------------------------------------------------
-  const frameTime = getFrameTime();
-  if (paused === false) {
-    starSpawnTimer += frameTime;
-  }
-  if (starSpawnTimer > 1) {
-    const star = new Star();
-    star.pos.y = -starTexture.height;
-    const x = Math.floor(Math.random() * getScreenWidth() - starTexture.width);
-    star.pos.x = x;
-    world.add(star);
-    starSpawnTimer = 0;
-  }
+  if (gameOver === false) {
+    const frameTime = getFrameTime();
+    if (paused === false) {
+      starSpawnTimer += frameTime;
+    }
+    if (starSpawnTimer > 1) {
+      const star = new Star();
+      star.pos.y = -starTexture.height;
+      const x = Math.floor(
+        Math.random() * getScreenWidth() - starTexture.width,
+      );
+      star.pos.x = x;
+      world.add(star);
+      starSpawnTimer = 0;
+    }
 
-  if (paused === false) {
-    for (const entity of world.entities) {
-      entity.update();
+    if (paused === false) {
+      for (const entity of world.entities) {
+        entity.update();
+      }
     }
   }
 
@@ -250,6 +257,15 @@ while (windowShouldClose() === false) {
     posX: 10,
     posY: 120,
   });
+  if (gameOver) {
+    drawText({
+      text: "Game Over!",
+      color: White,
+      fontSize: 32,
+      posX: getScreenWidth() / 2 - measureText("Game Over!", 32) / 2,
+      posY: getScreenHeight() / 2,
+    });
+  }
   endDrawing();
 }
 
