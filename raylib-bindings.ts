@@ -160,6 +160,10 @@ const raylib = Deno.dlopen("./lib/libraylib.so.5.5.0", {
     parameters: [TextureStruct, "i16", "i16", ColorStruct],
     result: "void",
   },
+  DrawTextureRec: {
+    parameters: [TextureStruct, RectangleStruct, Vector2Struct, ColorStruct],
+    result: "void",
+  },
   EndDrawing: {
     parameters: [],
     result: "void",
@@ -372,6 +376,10 @@ function toCamera2DArray(camera: Camera): BufferSource {
 
 function toRaylibRectangle(rec: Rectangle): BufferSource {
   return new Float32Array([rec.x, rec.y, rec.width, rec.height]);
+}
+
+function toRaylibVector2(vector: Vector2): BufferSource {
+  return toFloat32Array([vector.x, vector.y]);
 }
 
 function toFloat32Array(arr: number[]): BufferSource {
@@ -929,6 +937,20 @@ export function drawTexture(args: {
     args.x,
     args.y,
     toRaylibColor(White),
+  );
+}
+
+export function drawTextureRec(args: {
+  texture: Texture;
+  rectangle: Rectangle;
+  vector: Vector2;
+  color: Color;
+}): void {
+  return raylib.symbols.DrawTextureRec(
+    toRaylibTexture(args.texture),
+    toRaylibRectangle(args.rectangle),
+    toRaylibVector2(args.vector),
+    toRaylibColor(args.color),
   );
 }
 
