@@ -2,6 +2,7 @@ import {
   beginDrawing,
   checkCollisionRecs,
   clearBackground,
+  closeAudioDevice,
   closeWindow,
   drawFPS,
   drawText,
@@ -320,5 +321,7 @@ unloadTexture(bgTexture);
 
 unloadSound(spellSound);
 unloadSound(explodeSound);
+
+closeAudioDevice();
 
 closeWindow();
