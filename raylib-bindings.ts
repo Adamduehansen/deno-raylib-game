@@ -623,6 +623,7 @@ export const SkyBlue: Color = [102, 191, 255, 255];
 export const White: Color = [255, 255, 255, 255];
 
 // Key constants
+export const KeySpace = 32;
 export const KeyOne = 49;
 export const KeyTwo = 50;
 export const KeyA = 65;

@@ -1,5 +1,6 @@
 import { type Color, drawText } from "../raylib-bindings.ts";
 import { type Vector } from "./math.ts";
+import { Scene } from "./scene.ts";
 
 interface EntityArgs {
   pos: Vector;
@@ -7,12 +8,15 @@ interface EntityArgs {
 
 export abstract class Entity {
   pos: Vector;
+  scene?: Scene;
 
   constructor(args: EntityArgs) {
     this.pos = args.pos;
   }
 
   update(): void {}
+
+  initialize(): void {}
 
   abstract render(): void;
 }

@@ -10,8 +10,10 @@ import {
   endDrawing,
   initWindow,
   isKeyDown,
+  isKeyPressed,
   KeyA,
   KeyD,
+  KeySpace,
   Maroon,
   RayWhite,
   setTargetFPS,
@@ -32,6 +34,12 @@ class Ball extends Entity {
       },
     });
     this.#paddle = paddle;
+  }
+
+  override initialize(): void {
+    this.scene?.eventEmitter.on("active", (activated) => {
+      console.log("active", activated);
+    });
   }
 
   override render(): void {
@@ -97,6 +105,14 @@ class GameScene extends Scene {
     const paddle = new Paddle();
     this.add(paddle);
     this.add(new Ball(paddle));
+  }
+
+  override update(): void {
+    super.update();
+
+    if (isKeyPressed(KeySpace)) {
+      this.eventEmitter.emit("active", true);
+    }
   }
 }
 
