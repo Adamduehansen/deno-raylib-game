@@ -38,7 +38,7 @@ export class Paddle extends Entity {
       this.pos.x -= 5;
     }
     if (this.pos.x + Paddle.width > getScreenWidth()) {
-      this.pos.x = getScreenHeight() - Paddle.width;
+      this.pos.x = getScreenWidth() - Paddle.width;
     }
   }
 
