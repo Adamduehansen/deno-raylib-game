@@ -144,6 +144,10 @@ const raylib = Deno.dlopen("./lib/libraylib.so.5.5.0", {
     parameters: ["i16", "i16", "i16", "i16", ColorStruct],
     result: "void",
   },
+  DrawRectangleLinesEx: {
+    parameters: [RectangleStruct, "f32", ColorStruct],
+    result: "void",
+  },
   DrawRectangleRec: {
     parameters: [RectangleStruct, ColorStruct],
     result: "void",
@@ -802,6 +806,9 @@ export function drawRectangle(args: {
   );
 }
 
+/**
+ * Draw rectangle outline
+ */
 export function drawRectangleLines(args: {
   posX: number;
   posY: number;
@@ -815,6 +822,21 @@ export function drawRectangleLines(args: {
     args.width,
     args.height,
     toUint8Array(args.color),
+  );
+}
+
+/**
+ * Draw rectangle outline with extended parameters
+ */
+export function drawRectangleLinesEx(args: {
+  rec: Rectangle;
+  lineThick: number;
+  color: Color;
+}): void {
+  return raylib.symbols.DrawRectangleLinesEx(
+    toRaylibRectangle(args.rec),
+    args.lineThick,
+    toRaylibColor(args.color),
   );
 }
 
