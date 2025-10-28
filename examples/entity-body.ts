@@ -1,14 +1,14 @@
 import {
   beginDrawing,
   Black,
+  Blue,
   clearBackground,
   closeWindow,
-  drawRectangleLinesEx,
+  drawCircleV,
   drawRectangleRec,
   drawText,
   endDrawing,
   getMousePosition,
-  Green,
   initWindow,
   RayWhite,
   Red,
@@ -18,7 +18,7 @@ import {
 import { Scene } from "@src/scene.ts";
 import { Entity } from "@src/entity.ts";
 import { vec } from "@src/math.ts";
-import { RectangleBody } from "@src/physics.ts";
+import { CircleBody, RectangleBody } from "@src/physics.ts";
 
 initWindow({
   title: "Example: entity body",
@@ -46,16 +46,26 @@ class Rectangle extends Entity {
       height: this.height,
     }, Red);
 
-    drawRectangleLinesEx({
-      rec: {
-        x: this.pos.x - this.body.width / 2,
-        y: this.pos.y - this.body.height / 2,
-        height: this.body.height,
-        width: this.body.width,
-      },
-      color: Green,
-      lineThick: 1,
+    this.body?.render();
+  }
+}
+
+class Circle extends Entity {
+  constructor() {
+    super({
+      pos: vec(200, 100),
+      body: new CircleBody(30),
     });
+  }
+
+  override render(): void {
+    drawCircleV({
+      center: this.pos,
+      color: Blue,
+      radius: 25,
+    });
+
+    this.body?.render();
   }
 }
 
@@ -64,6 +74,7 @@ class MainScene extends Scene {
     super();
 
     this.entityManager.add(new Rectangle());
+    this.entityManager.add(new Circle());
   }
 }
 

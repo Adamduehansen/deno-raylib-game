@@ -1,6 +1,6 @@
-import { type Color, drawText, Rectangle } from "../raylib-bindings.ts";
+import { type Color, drawText } from "../raylib-bindings.ts";
 import { vec, type Vector } from "./math.ts";
-import { RectangleBody } from "./physics.ts";
+import { Body } from "./physics.ts";
 import { Scene } from "./scene.ts";
 
 interface EntityArgs {
@@ -8,7 +8,7 @@ interface EntityArgs {
   name?: string;
   width?: number;
   height?: number;
-  body?: RectangleBody;
+  body?: Body;
 }
 
 let currentEntityId = 1;
@@ -23,21 +23,16 @@ export abstract class Entity {
   name?: string;
   scene?: Scene;
 
-  #body: Rectangle;
+  #body?: Body;
 
-  get body(): Rectangle {
+  get body(): Body | undefined {
     return this.#body;
   }
 
   constructor(args: EntityArgs) {
     this.pos = args.pos;
     this.velocity = vec(0, 0);
-    this.#body = {
-      x: args.pos.x,
-      y: args.pos.y,
-      height: args.body?.height ?? 0,
-      width: args.body?.width ?? 0,
-    };
+    this.#body = args.body;
     this.name = args.name ?? undefined;
     this.id = currentEntityId++;
     this.width = args.width ?? 0;
@@ -47,12 +42,7 @@ export abstract class Entity {
   update(): void {
     this.pos.x += this.velocity.x;
     this.pos.y += this.velocity.y;
-    this.#body = {
-      x: this.pos.x,
-      y: this.pos.y,
-      width: this.body.width,
-      height: this.body.height,
-    };
+    this.#body?.update(this.pos);
   }
 
   remove(): void {

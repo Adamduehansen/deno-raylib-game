@@ -124,6 +124,10 @@ const raylib = Deno.dlopen("./lib/libraylib.so.5.5.0", {
     parameters: [Vector2Struct, "f32", ColorStruct],
     result: "void",
   },
+  DrawCircleLinesV: {
+    parameters: [Vector2Struct, "f32", ColorStruct],
+    result: "void",
+  },
   DrawFPS: {
     parameters: ["i16", "i16"],
     result: "void",
@@ -745,13 +749,16 @@ export function clearBackground(color: Color): void {
   raylib.symbols.ClearBackground(toUint8Array(color));
 }
 
+/**
+ * Draw a color-filled circle
+ */
 export function drawCircle(args: {
   centerX: number;
   centerY: number;
   radius: number;
   color: Color;
 }): void {
-  return raylib.symbols.DrawCircle(
+  raylib.symbols.DrawCircle(
     args.centerX,
     args.centerY,
     args.radius,
@@ -759,6 +766,9 @@ export function drawCircle(args: {
   );
 }
 
+/**
+ * Draw a color-filled circle (Vector version)
+ */
 export function drawCircleV(args: {
   center: Vector2;
   radius: number;
@@ -768,6 +778,21 @@ export function drawCircleV(args: {
     toFloat32Array([args.center.x, args.center.y]),
     args.radius,
     toUint8Array(args.color),
+  );
+}
+
+/**
+ * Draw circle outline (Vector version)
+ */
+export function drawCircleLinesV(args: {
+  center: Vector2;
+  radius: number;
+  color: Color;
+}): void {
+  raylib.symbols.DrawCircleLinesV(
+    toRaylibVector2(args.center),
+    args.radius,
+    toRaylibColor(args.color),
   );
 }
 
