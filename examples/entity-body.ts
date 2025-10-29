@@ -12,8 +12,10 @@ import {
   Green,
   initWindow,
   isKeyDown,
+  KeyDown,
   KeyLeft,
   KeyRight,
+  KeyUp,
   RayWhite,
   Red,
   setTargetFPS,
@@ -54,6 +56,8 @@ class Rectangle1 extends Entity {
 }
 
 class Rectangle2 extends Entity {
+  readonly #speed = 1;
+
   constructor() {
     super({
       pos: vec(200, 100),
@@ -72,11 +76,18 @@ class Rectangle2 extends Entity {
     super.update();
 
     if (isKeyDown(KeyLeft)) {
-      this.velocity.x = -3;
+      this.velocity.x = -this.#speed;
     } else if (isKeyDown(KeyRight)) {
-      this.velocity.x = 3;
+      this.velocity.x = this.#speed;
     } else {
       this.velocity.x = 0;
+    }
+    if (isKeyDown(KeyUp)) {
+      this.velocity.y = -this.#speed;
+    } else if (isKeyDown(KeyDown)) {
+      this.velocity.y = this.#speed;
+    } else {
+      this.velocity.y = 0;
     }
   }
 

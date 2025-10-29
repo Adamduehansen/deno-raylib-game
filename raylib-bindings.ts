@@ -647,6 +647,8 @@ export const KeyW = 87;
 export const KeyEnter = 257;
 export const KeyRight = 262;
 export const KeyLeft = 263;
+export const KeyDown = 264;
+export const KeyUp = 265;
 export const KeyLeftAlt = 342;
 export const KeyRightAlt = 346;
 

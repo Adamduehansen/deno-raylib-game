@@ -29,7 +29,7 @@ export abstract class Body {
   }
 }
 
-class RectangleBody extends Body {
+export class RectangleBody extends Body {
   width: number;
   height: number;
 
@@ -57,9 +57,11 @@ class RectangleBody extends Body {
   }
 
   override getCollider(): Rectangle {
+    // The width and the height is subtracted from this.pos since it is the center
+    // of the collider.
     return {
-      x: this.pos.x,
-      y: this.pos.y,
+      x: this.pos.x - this.width / 2,
+      y: this.pos.y - this.height / 2,
       height: this.height,
       width: this.width,
     };

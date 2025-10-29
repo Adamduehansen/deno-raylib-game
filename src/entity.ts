@@ -45,7 +45,6 @@ export abstract class Entity {
   update(): void {
     this.pos.x += this.velocity.x;
     this.pos.y += this.velocity.y;
-    this.#body?.update(this.pos);
   }
 
   remove(): void {

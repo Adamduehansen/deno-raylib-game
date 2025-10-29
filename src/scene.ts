@@ -1,6 +1,7 @@
-import { checkCollisionRecs, Rectangle } from "../raylib-bindings.ts";
+import { checkCollisionRecs } from "../raylib-bindings.ts";
 import { Entity } from "./entity.ts";
 import { EventEmitter } from "./event-emitter.ts";
+import { RectangleBody } from "./physics.ts";
 
 class EntityManager {
   #entities: Entity[] = [];
@@ -43,6 +44,7 @@ export abstract class Scene {
   update(): void {
     for (const entity of this.entityManager.entities) {
       entity.update();
+      entity.body?.update(entity.pos);
     }
 
     for (const entity of this.entityManager.entities) {
@@ -59,17 +61,16 @@ export abstract class Scene {
 
   #checkCollisionWithOtherEntities(entity: Entity) {
     for (const other of this.entityManager.entities) {
-      if (
-        other.id === entity.id || entity.body === undefined ||
-        other.body === undefined
-      ) {
+      if (other.id === entity.id) {
         continue;
       }
 
       if (
+        entity.body instanceof RectangleBody &&
+        other.body instanceof RectangleBody &&
         checkCollisionRecs(
-          entity.body.getCollider() as Rectangle,
-          other.body.getCollider() as Rectangle,
+          entity.body.getCollider(),
+          other.body.getCollider(),
         )
       ) {
         entity.onCollision(other);
