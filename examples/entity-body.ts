@@ -36,6 +36,7 @@ class Rectangle1 extends Entity {
   constructor() {
     super({
       pos: vec(100, 100),
+      name: "Rectangle 1",
       width: 50,
       height: 50,
       body: Body.rectangle(60, 60),
@@ -56,16 +57,15 @@ class Rectangle2 extends Entity {
   constructor() {
     super({
       pos: vec(200, 100),
+      name: "Rectangle 2",
       width: 40,
       height: 40,
       body: Body.rectangle(50, 50),
     });
   }
 
-  override initialize(): void {
-    this.eventEmitter.on("collision", () => {
-      console.log("Collision!");
-    });
+  override onCollision(other: Entity): void {
+    console.log("Collision!", other.name);
   }
 
   override update(): void {
@@ -94,6 +94,7 @@ class Circle extends Entity {
   constructor() {
     super({
       pos: vec(100, 200),
+      name: "Circle",
       body: Body.Circle(30),
     });
   }

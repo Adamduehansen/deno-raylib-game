@@ -54,6 +54,9 @@ export abstract class Entity {
 
   initialize(): void {}
 
+  // deno-lint-ignore no-unused-vars
+  onCollision(other: Entity): void {}
+
   abstract render(): void;
 }
 

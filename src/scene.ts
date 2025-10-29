@@ -66,14 +66,13 @@ export abstract class Scene {
         continue;
       }
 
-      // TODO: use Raylib to check collision with other entity.
       if (
         checkCollisionRecs(
           entity.body.getCollider() as Rectangle,
           other.body.getCollider() as Rectangle,
         )
       ) {
-        entity.eventEmitter.emit("collision");
+        entity.onCollision(other);
       }
     }
   }
