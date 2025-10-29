@@ -2,14 +2,23 @@ import {
   drawCircleLinesV,
   drawRectangleLinesEx,
   Green,
+  Rectangle,
 } from "../raylib-bindings.ts";
 import { vec, Vector } from "./math.ts";
+
+interface Circle {
+  vector: Vector;
+  radius: number;
+}
+
+type ColliderType = Rectangle | Circle;
 
 export abstract class Body {
   pos: Vector = vec(0, 0);
 
   abstract update(pos: Vector): void;
   abstract render(): void;
+  abstract getCollider(): ColliderType;
 
   static rectangle(width: number, height: number): Body {
     return new RectangleBody(width, height);
@@ -46,6 +55,15 @@ class RectangleBody extends Body {
       lineThick: 1,
     });
   }
+
+  override getCollider(): Rectangle {
+    return {
+      x: this.pos.x,
+      y: this.pos.y,
+      height: this.height,
+      width: this.width,
+    };
+  }
 }
 
 class CircleBody extends Body {
@@ -66,5 +84,12 @@ class CircleBody extends Body {
       color: Green,
       radius: this.radius,
     });
+  }
+
+  override getCollider(): Circle {
+    return {
+      radius: this.radius,
+      vector: this.pos,
+    };
   }
 }

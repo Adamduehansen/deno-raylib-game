@@ -5,9 +5,11 @@ import {
   clearBackground,
   closeWindow,
   drawCircleV,
+  drawFPS,
   drawRectangleRec,
   endDrawing,
   getMousePosition,
+  Green,
   initWindow,
   isKeyDown,
   KeyLeft,
@@ -30,7 +32,7 @@ initWindow({
 
 setTargetFPS(60);
 
-class Rectangle extends Entity {
+class Rectangle1 extends Entity {
   constructor() {
     super({
       pos: vec(100, 100),
@@ -50,23 +52,20 @@ class Rectangle extends Entity {
   }
 }
 
-class Circle extends Entity {
+class Rectangle2 extends Entity {
   constructor() {
     super({
       pos: vec(200, 100),
-      body: Body.Circle(30),
-    });
-  }
-
-  override render(): void {
-    drawCircleV({
-      center: this.pos,
-      color: Blue,
-      radius: 25,
+      width: 40,
+      height: 40,
+      body: Body.rectangle(50, 50),
     });
   }
 
   override initialize(): void {
+    this.eventEmitter.on("collision", () => {
+      console.log("Collision!");
+    });
   }
 
   override update(): void {
@@ -79,6 +78,32 @@ class Circle extends Entity {
     } else {
       this.velocity.x = 0;
     }
+  }
+
+  override render(): void {
+    drawRectangleRec({
+      x: this.pos.x - this.width / 2,
+      y: this.pos.y - this.height / 2,
+      width: this.width,
+      height: this.height,
+    }, Green);
+  }
+}
+
+class Circle extends Entity {
+  constructor() {
+    super({
+      pos: vec(100, 200),
+      body: Body.Circle(30),
+    });
+  }
+
+  override render(): void {
+    drawCircleV({
+      center: this.pos,
+      color: Blue,
+      radius: 25,
+    });
   }
 }
 
@@ -103,7 +128,8 @@ class MainScene extends Scene {
   constructor() {
     super();
 
-    this.entityManager.add(new Rectangle());
+    this.entityManager.add(new Rectangle1());
+    this.entityManager.add(new Rectangle2());
     this.entityManager.add(new Circle());
     this.entityManager.add(new MousePositionText());
   }
@@ -121,6 +147,7 @@ while (windowShouldClose() === false) {
   beginDrawing();
   clearBackground(RayWhite);
   scene.render();
+  drawFPS(0, 30);
   endDrawing();
 }
 

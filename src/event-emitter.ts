@@ -4,6 +4,10 @@ export class EventEmitter {
   #eventMap: EventMap = {};
 
   emit(event: string) {
+    if (this.#eventMap[event] === undefined) {
+      return;
+    }
+
     for (const handler of this.#eventMap[event]) {
       handler();
     }

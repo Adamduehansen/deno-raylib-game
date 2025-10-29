@@ -1,4 +1,5 @@
 import { type Color, drawText } from "../raylib-bindings.ts";
+import { EventEmitter } from "./event-emitter.ts";
 import { vec, type Vector } from "./math.ts";
 import { Body } from "./physics.ts";
 import { Scene } from "./scene.ts";
@@ -24,6 +25,8 @@ export abstract class Entity {
   scene?: Scene;
 
   #body?: Body;
+
+  eventEmitter = new EventEmitter();
 
   get body(): Body | undefined {
     return this.#body;
