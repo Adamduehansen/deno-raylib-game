@@ -3,6 +3,7 @@ import {
   beginDrawing,
   clearBackground,
   closeWindow,
+  drawFPS,
   endDrawing,
   initWindow,
   RayWhite,
@@ -42,6 +43,7 @@ while (windowShouldClose() === false) {
   beginDrawing();
   clearBackground(RayWhite);
   scenes[currentScene].render();
+  drawFPS(0, 0);
   endDrawing();
 }
 
