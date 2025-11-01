@@ -65,6 +65,10 @@ export abstract class Scene {
   }
 
   #checkCollisionWithOtherEntities(entity: Entity) {
+    if (entity.body?.collisionType === "passive") {
+      return;
+    }
+
     for (const other of this.entityManager.entities) {
       if (other.id === entity.id) {
         continue;

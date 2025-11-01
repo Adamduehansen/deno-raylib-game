@@ -6,6 +6,7 @@ import {
   drawRectangleRec,
   Gray,
 } from "../../raylib-bindings.ts";
+import { Body } from "@src/physics.ts";
 
 interface BrickArgs {
   pos: Vector;
@@ -15,17 +16,25 @@ interface BrickArgs {
 export class Brick extends Entity {
   readonly color: Color;
 
+  static size = 40;
+
   constructor({ pos, color }: BrickArgs) {
     super({
       pos: pos,
-      height: 40,
-      width: 40,
+      height: Brick.size,
+      width: Brick.size,
       name: "brick",
+      body: Body.rectangle(Brick.size, Brick.size),
     });
     this.color = color;
   }
 
   override render(): void {
-    drawRectangleRec(this.body, this.color);
+    drawRectangleRec({
+      x: this.pos.x - Brick.size / 2,
+      y: this.pos.y - Brick.size / 2,
+      width: this.width,
+      height: this.height,
+    }, this.color);
   }
 }

@@ -23,7 +23,7 @@ export class GameScene extends Scene {
       for (let columnIndex = 0; columnIndex < 20; columnIndex++) {
         this.entityManager.add(
           new Brick({
-            pos: vec(40 * columnIndex, 40 * rowIndex + 40),
+            pos: vec(40 * columnIndex + Brick.size / 2, 40 * rowIndex + 40),
             color: rowIndex % 2 === 0
               ? columnIndex % 2 === 0 ? Gray : DarkGray
               : columnIndex % 2 === 0

@@ -15,8 +15,11 @@ interface Circle {
 
 type ColliderType = Rectangle | Circle;
 
+type CollisionType = "passive" | "active";
+
 export abstract class Body {
   pos: Vector = vec(0, 0);
+  collisionType: CollisionType = "passive";
 
   abstract update(pos: Vector): void;
   abstract render(): void;

@@ -20,6 +20,7 @@ export class Ball extends Entity {
       name: "ball",
       body: Body.Circle(Ball.radius),
     });
+    this.body!.collisionType = "active";
     this.#paddle = paddle;
   }
 
@@ -45,6 +46,9 @@ export class Ball extends Entity {
     if (other.name === "paddle") {
       this.velocity.y *= -1;
       this.velocity.x = (this.pos.x - this.#paddle.pos.x) / 5;
+    } else if (other.name === "brick") {
+      this.velocity.y *= -1;
+      other.remove();
     }
   }
 
@@ -57,25 +61,12 @@ export class Ball extends Entity {
       this.pos.y = this.#paddle.pos.y - 20;
     }
 
-    // // Check collision with top
+    // Check collision with top
     if (this.pos.y < 0 + Ball.radius / 2) {
       this.velocity.y *= -1;
-    }
-
-    // // Check collision with walls
-    if (this.pos.x < 0 || this.pos.x > getScreenWidth()) {
+    } // Check collision with walls
+    else if (this.pos.x < 0 || this.pos.x > getScreenWidth()) {
       this.velocity.x *= -1;
     }
-
-    // // Check collision with any brick
-    // const bricks = this.scene?.entityManager.getByName("brick") ?? [];
-    // for (const brick of bricks) {
-    //   if (!checkCollisionCircleRec(this.pos, Ball.radius, brick.body)) {
-    //     continue;
-    //   }
-
-    //   this.velocity.y *= -1;
-    //   brick.remove();
-    // }
   }
 }
