@@ -8,37 +8,42 @@ import {
   KeyA,
   KeyD,
 } from "../../raylib-bindings.ts";
+import { Body } from "@src/physics.ts";
 
 export class Paddle extends Entity {
   static width = 80;
   static height = 20;
+  static speed = 5;
 
   constructor() {
     super({
       pos: {
-        x: getScreenWidth() / 2 - Paddle.width / 2,
+        x: getScreenWidth() / 2,
         y: Math.floor(getScreenHeight() * 7 / 8),
       },
       width: Paddle.width,
       height: Paddle.height,
       name: "paddle",
+      body: Body.rectangle(Paddle.width, Paddle.height),
     });
   }
 
   override update(): void {
     super.update();
     if (isKeyDown(KeyD)) {
-      this.pos.x += 5;
+      this.velocity.x = Paddle.speed;
+    } else if (isKeyDown(KeyA)) {
+      this.velocity.x = -Paddle.speed;
+    } else {
+      this.velocity.x = 0;
     }
+
     if (this.pos.x < 0) {
       this.pos.x = 0;
     }
 
-    if (isKeyDown(KeyA)) {
-      this.pos.x -= 5;
-    }
-    if (this.pos.x + Paddle.width > getScreenWidth()) {
-      this.pos.x = getScreenWidth() - Paddle.width;
+    if (this.pos.x > getScreenWidth()) {
+      this.pos.x = getScreenWidth();
     }
   }
 
@@ -47,8 +52,8 @@ export class Paddle extends Entity {
       color: Black,
       height: Paddle.height,
       width: Paddle.width,
-      posX: this.pos.x,
-      posY: this.pos.y,
+      posX: this.pos.x - Paddle.width / 2,
+      posY: this.pos.y - Paddle.height / 2,
     });
   }
 }
