@@ -2,6 +2,7 @@ import { Entity } from "@src/entity.ts";
 import { drawCircleV, getScreenWidth, Maroon } from "../../raylib-bindings.ts";
 import { Paddle } from "./paddle.ts";
 import { Body } from "@src/physics.ts";
+import { Brick } from "./brick.ts";
 
 export class Ball extends Entity {
   static radius = 7;
@@ -47,7 +48,22 @@ export class Ball extends Entity {
       this.velocity.y *= -1;
       this.velocity.x = (this.pos.x - this.#paddle.pos.x) / 5;
     } else if (other.name === "brick") {
-      this.velocity.y *= -1;
+      if (
+        (this.pos.y > other.pos.y || this.pos.y < other.pos.y) &&
+        this.pos.x - Brick.size / 2 < other.pos.x &&
+        this.pos.x + Brick.size / 2 > other.pos.x
+      ) {
+        this.velocity.y *= -1;
+      }
+
+      if (
+        (this.pos.x > other.pos.x || this.pos.x < other.pos.x) &&
+        this.pos.y - Brick.size / 2 < other.pos.y &&
+        this.pos.y + Brick.size / 2 > other.pos.y
+      ) {
+        this.velocity.x *= -1;
+      }
+
       other.remove();
     }
   }
