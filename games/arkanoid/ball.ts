@@ -1,5 +1,10 @@
 import { Entity } from "@src/entity.ts";
-import { drawCircleV, getScreenWidth, Maroon } from "../../raylib-bindings.ts";
+import {
+  drawCircleV,
+  getScreenHeight,
+  getScreenWidth,
+  Maroon,
+} from "../../raylib-bindings.ts";
 import { Paddle } from "./paddle.ts";
 import { Body } from "@src/physics.ts";
 import { Brick } from "./brick.ts";
@@ -83,6 +88,9 @@ export class Ball extends Entity {
     } // Check collision with walls
     else if (this.pos.x < 0 || this.pos.x > getScreenWidth()) {
       this.velocity.x *= -1;
+    } else if (this.pos.y > getScreenHeight()) {
+      this.#active = false;
+      this.velocity.x = 0;
     }
   }
 }
