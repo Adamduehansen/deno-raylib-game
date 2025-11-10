@@ -72,5 +72,6 @@ export class Game {
 
   goToScene(name: string): void {
     this.#currentScene = name;
+    this.#scenes[this.#currentScene].activate();
   }
 }

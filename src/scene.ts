@@ -22,6 +22,13 @@ class EntityManager {
   add(entity: Entity): void {
     entity.scene = this.#scene;
     this.#entities.push(entity);
+    entity.initialize();
+  }
+
+  clear(): void {
+    for (const entity of this.#entities) {
+      entity.remove();
+    }
   }
 
   getByName(name: string): readonly Entity[] {
@@ -48,11 +55,17 @@ export abstract class Scene {
 
   constructor() {}
 
-  initialize(): void {
-    for (const entity of this.entityManager.entities) {
-      entity.initialize();
-    }
-  }
+  /**
+   * Called when a scene is switched to. Use this method to setup the entities
+   * of the scene.
+   */
+  activate(): void {}
+
+  /**
+   * Called once when the scene is added to the game. USe this to setup entities
+   * that needs to live across scene changes.
+   */
+  initialize(): void {}
 
   update(): void {
     for (const entity of this.entityManager.entities) {

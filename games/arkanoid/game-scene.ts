@@ -18,6 +18,24 @@ export class GameScene extends Scene {
   constructor() {
     super();
 
+    this.eventEmitter.on("decreaseLife", () => {
+      const lifes = this.entityManager.query((entity) =>
+        entity.name === "life"
+      );
+
+      if (lifes.length > 1) {
+        lifes.at(-1)?.remove();
+      } else {
+        this.game?.goToScene("gameOver");
+      }
+    });
+  }
+
+  override activate(): void {
+    super.activate();
+
+    this.entityManager.clear();
+
     const paddle = new Paddle();
     this.entityManager.add(paddle);
     this.entityManager.add(new Ball(paddle));
@@ -49,19 +67,6 @@ export class GameScene extends Scene {
         }),
       );
     }
-
-    this.eventEmitter.on("decreaseLife", () => {
-      const lifes = this.entityManager.query((entity) =>
-        entity.name === "life"
-      );
-
-      if (lifes.length > 1) {
-        lifes.at(-1)?.remove();
-      } else {
-        // this.eventEmitter.emit("goToGameOverScene");
-        this.game?.goToScene("gameOver");
-      }
-    });
   }
 
   override update(): void {

@@ -20,4 +20,6 @@ const game = new Game({
   initialScene: "game",
 });
 
+game.goToScene("game");
+
 game.start();
