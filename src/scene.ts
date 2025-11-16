@@ -49,6 +49,10 @@ class EntityManager {
   }
 }
 
+export interface SceneContext {
+  game: Game;
+}
+
 export abstract class Scene {
   readonly entityManager: EntityManager = new EntityManager(this);
 
@@ -68,7 +72,8 @@ export abstract class Scene {
    * Called once when the scene is added to the game. USe this to setup entities
    * that needs to live across scene changes.
    */
-  initialize(): void {}
+  // deno-lint-ignore no-unused-vars
+  initialize(context: SceneContext): void {}
 
   update(): void {
     for (const entity of this.entityManager.entities) {

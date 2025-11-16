@@ -1,4 +1,4 @@
-import { Scene } from "@src/scene.ts";
+import { Scene, SceneContext } from "@src/scene.ts";
 import {
   DarkGray,
   getScreenHeight,
@@ -12,13 +12,22 @@ import { Paddle } from "./paddle.ts";
 import { Brick } from "./brick.ts";
 import { vec } from "@src/math.ts";
 import { Life } from "./life.ts";
+import { Text } from "@src/entity.ts";
 
 const MAX_LIFES = 3;
 
 export class GameScene extends Scene {
   #paused = false;
+  #pauseText = new Text("GAME PAUSED", {
+    color: Gray,
+    fontSize: 48,
+    pos: vec(0, 0),
+  });
 
-  override initialize(): void {
+  override initialize({ game }: SceneContext): void {
+    this.entityManager.add(this.#pauseText);
+    this.#pauseText.pos = vec(game.width / 2, game.height / 2);
+
     this.eventEmitter.on("decreaseLife", () => {
       const lifes = this.entityManager.query((entity) =>
         entity.name === "life"
@@ -41,6 +50,18 @@ export class GameScene extends Scene {
         this.entityManager.clear();
         this.game?.goToScene("gameOver");
       }
+    });
+
+    this.eventEmitter.on("pause", (pause) => {
+      if (typeof pause !== "boolean") {
+        return;
+      }
+
+      // if (pause === true) {
+      //   this.#pauseText.
+      // } else {
+      //   this.#pauseText.hide();
+      // }
     });
   }
 

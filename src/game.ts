@@ -48,7 +48,9 @@ export class Game {
 
     for (const scene of Object.values(this.#scenes)) {
       scene.game = this;
-      scene.initialize();
+      scene.initialize({
+        game: this,
+      });
     }
   }
 

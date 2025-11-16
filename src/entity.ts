@@ -1,4 +1,9 @@
-import { type Color, drawText } from "../raylib-bindings.ts";
+import {
+  type Color,
+  drawTextEx,
+  getFontDefault,
+  measureText,
+} from "../raylib-bindings.ts";
 import { EventEmitter } from "./event-emitter.ts";
 import { vec, type Vector } from "./math.ts";
 import { Body } from "./physics.ts";
@@ -90,12 +95,17 @@ export class Text extends Entity {
   }
 
   override render(): void {
-    drawText({
+    const textLength = measureText(this.text, 48);
+    drawTextEx({
       text: this.text,
-      color: this.color,
+      tint: this.color,
       fontSize: this.fontSize,
-      posX: this.pos.x,
-      posY: this.pos.y,
+      spacing: 5,
+      font: getFontDefault(),
+      position: {
+        x: this.pos.x - textLength / 2,
+        y: this.pos.y,
+      },
     });
   }
 }
