@@ -55,8 +55,7 @@ export interface SceneContext {
 
 export abstract class Scene {
   readonly entityManager: EntityManager = new EntityManager(this);
-
-  eventEmitter: EventEmitter = new EventEmitter();
+  readonly eventEmitter: EventEmitter = new EventEmitter();
 
   game?: Game;
 

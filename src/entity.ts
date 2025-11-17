@@ -26,18 +26,16 @@ let currentEntityId = 1;
  */
 
 export abstract class Entity {
-  id: number;
+  readonly id: number;
+  readonly height: number;
+  readonly width: number;
+  readonly renderer: Renderer<Entity>;
+  readonly name?: string;
+
+  scene?: Scene;
+  #body?: Body;
   pos: Vector;
   velocity: Vector;
-  height: number;
-  width: number;
-
-  name?: string;
-  scene?: Scene;
-
-  #body?: Body;
-
-  readonly renderer: Renderer<Entity>;
 
   eventEmitter = new EventEmitter();
 
