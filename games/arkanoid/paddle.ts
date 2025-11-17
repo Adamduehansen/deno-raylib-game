@@ -1,13 +1,8 @@
 import { Entity } from "@src/entity.ts";
-import {
-  Black,
-  drawRectangle,
-  isKeyDown,
-  KeyA,
-  KeyD,
-} from "../../raylib-bindings.ts";
+import { Black, isKeyDown, KeyA, KeyD } from "../../raylib-bindings.ts";
 import { Body } from "@src/physics.ts";
 import { vec } from "@src/math.ts";
+import { RectangleRenderer } from "@src/renderer.ts";
 
 export class Paddle extends Entity {
   static width = 80;
@@ -23,6 +18,7 @@ export class Paddle extends Entity {
       height: Paddle.height,
       name: "paddle",
       body: Body.rectangle(Paddle.width, Paddle.height),
+      renderer: new RectangleRenderer(Black),
     });
   }
 
@@ -63,15 +59,5 @@ export class Paddle extends Entity {
         this.pos.x = this.scene!.game!.width;
       }
     }
-  }
-
-  override render(): void {
-    drawRectangle({
-      color: Black,
-      height: Paddle.height,
-      width: Paddle.width,
-      posX: this.pos.x - Paddle.width / 2,
-      posY: this.pos.y - Paddle.height / 2,
-    });
   }
 }

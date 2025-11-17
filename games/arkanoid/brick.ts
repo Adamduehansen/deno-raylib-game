@@ -1,12 +1,8 @@
 import { Entity, Event } from "@src/entity.ts";
 import { Vector } from "@src/math.ts";
-import {
-  Color,
-  DarkGray,
-  drawRectangleRec,
-  Gray,
-} from "../../raylib-bindings.ts";
+import { DarkGray, Gray } from "../../raylib-bindings.ts";
 import { Body } from "@src/physics.ts";
+import { RectangleRenderer } from "@src/renderer.ts";
 
 interface BrickArgs {
   pos: Vector;
@@ -14,8 +10,6 @@ interface BrickArgs {
 }
 
 export class Brick extends Entity {
-  readonly color: Color;
-
   static size = 40;
 
   constructor({ pos, color }: BrickArgs) {
@@ -25,17 +19,8 @@ export class Brick extends Entity {
       width: Brick.size,
       name: "brick",
       body: Body.rectangle(Brick.size, Brick.size),
+      renderer: new RectangleRenderer(color),
     });
-    this.color = color;
-  }
-
-  override render(): void {
-    drawRectangleRec({
-      x: this.pos.x - Brick.size / 2,
-      y: this.pos.y - Brick.size / 2,
-      width: this.width,
-      height: this.height,
-    }, this.color);
   }
 
   override onDestroyed(event: Event): void {

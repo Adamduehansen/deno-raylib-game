@@ -1,6 +1,7 @@
+import { LightGray } from "../../raylib-bindings.ts";
 import { Entity } from "@src/entity.ts";
-import { drawRectangleRec, LightGray } from "../../raylib-bindings.ts";
 import { Vector } from "@src/math.ts";
+import { RectangleRenderer } from "@src/renderer.ts";
 
 const WIDTH = 40;
 const HEIGHT = 10;
@@ -16,15 +17,7 @@ export class Life extends Entity {
       height: HEIGHT,
       width: WIDTH,
       name: "life",
+      renderer: new RectangleRenderer(LightGray),
     });
-  }
-
-  override render(): void {
-    drawRectangleRec({
-      x: this.pos.x - WIDTH / 2,
-      y: this.pos.y - HEIGHT / 2,
-      width: this.width,
-      height: this.height,
-    }, LightGray);
   }
 }

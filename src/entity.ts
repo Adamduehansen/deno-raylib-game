@@ -1,10 +1,6 @@
-import {
-  type Color,
-  drawTextEx,
-  getFontDefault,
-  measureText,
-} from "../raylib-bindings.ts";
+import { type Color } from "../raylib-bindings.ts";
 import { EventEmitter } from "./event-emitter.ts";
+import { Renderer, TextRenderer } from "./renderer.ts";
 import { vec, type Vector } from "./math.ts";
 import { Body } from "./physics.ts";
 import { Scene } from "./scene.ts";
@@ -18,10 +14,16 @@ interface EntityArgs {
   name?: string;
   width?: number;
   height?: number;
+  radius?: number;
   body?: Body;
+  renderer: Renderer<Entity>;
 }
 
 let currentEntityId = 1;
+
+/**
+ * TODO: Can some of the properties of entity be set to 'readonly'?
+ */
 
 export abstract class Entity {
   id: number;
@@ -35,6 +37,8 @@ export abstract class Entity {
 
   #body?: Body;
 
+  readonly renderer: Renderer<Entity>;
+
   eventEmitter = new EventEmitter();
 
   get body(): Body | undefined {
@@ -47,8 +51,12 @@ export abstract class Entity {
     this.#body = args.body;
     this.name = args.name ?? undefined;
     this.id = currentEntityId++;
-    this.width = args.width ?? 0;
-    this.height = args.height ?? 0;
+
+    // Width and height are set to the radius if given.
+    this.width = args.radius ?? args.width ?? 0;
+    this.height = args.radius ?? args.height ?? 0;
+
+    this.renderer = args.renderer;
   }
 
   update(): void {
@@ -71,7 +79,9 @@ export abstract class Entity {
   // deno-lint-ignore no-unused-vars
   onDestroyed(event: Event) {}
 
-  abstract render(): void;
+  render(): void {
+    this.renderer.render(this);
+  }
 }
 
 interface TextOptions {
@@ -82,30 +92,14 @@ interface TextOptions {
 
 export class Text extends Entity {
   text: string;
-  readonly color: Color;
   readonly fontSize: number;
 
   constructor(text: string, options: TextOptions) {
     super({
       pos: options.pos,
+      renderer: new TextRenderer(options.color),
     });
     this.text = text;
-    this.color = options.color;
     this.fontSize = options.fontSize;
-  }
-
-  override render(): void {
-    const textLength = measureText(this.text, 48);
-    drawTextEx({
-      text: this.text,
-      tint: this.color,
-      fontSize: this.fontSize,
-      spacing: 5,
-      font: getFontDefault(),
-      position: {
-        x: this.pos.x - textLength / 2,
-        y: this.pos.y,
-      },
-    });
   }
 }

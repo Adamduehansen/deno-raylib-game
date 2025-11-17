@@ -27,6 +27,7 @@ export class GameScene extends Scene {
   override initialize({ game }: SceneContext): void {
     this.entityManager.add(this.#pauseText);
     this.#pauseText.pos = vec(game.width / 2, game.height / 2);
+    this.#pauseText.renderer.setAlpha(0);
 
     this.eventEmitter.on("decreaseLife", () => {
       const lifes = this.entityManager.query((entity) =>
@@ -57,11 +58,11 @@ export class GameScene extends Scene {
         return;
       }
 
-      // if (pause === true) {
-      //   this.#pauseText.
-      // } else {
-      //   this.#pauseText.hide();
-      // }
+      if (pause === true) {
+        this.#pauseText.renderer.setAlpha(255);
+      } else {
+        this.#pauseText.renderer.setAlpha(0);
+      }
     });
   }
 

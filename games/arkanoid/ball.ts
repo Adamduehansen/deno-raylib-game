@@ -1,6 +1,5 @@
 import { Entity } from "@src/entity.ts";
 import {
-  drawCircleV,
   getScreenHeight,
   getScreenWidth,
   Maroon,
@@ -8,6 +7,7 @@ import {
 import { Paddle } from "./paddle.ts";
 import { Body } from "@src/physics.ts";
 import { Brick } from "./brick.ts";
+import { CircleRenderer } from "@src/renderer.ts";
 
 export class Ball extends Entity {
   static radius = 7;
@@ -22,10 +22,10 @@ export class Ball extends Entity {
         x: 0,
         y: 0,
       },
-      height: Ball.radius,
-      width: Ball.radius,
+      radius: Ball.radius,
       name: "ball",
       body: Body.Circle(Ball.radius),
+      renderer: new CircleRenderer(Maroon),
     });
     this.body!.collisionType = "active";
     this.#paddle = paddle;
@@ -39,17 +39,6 @@ export class Ball extends Entity {
 
     this.scene?.eventEmitter.on("pause", () => {
       this.#paused = !this.#paused;
-    });
-  }
-
-  override render(): void {
-    drawCircleV({
-      center: {
-        x: this.pos.x,
-        y: this.pos.y,
-      },
-      color: Maroon,
-      radius: Ball.radius,
     });
   }
 
