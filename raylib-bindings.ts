@@ -83,6 +83,14 @@ export const FontStruct = {
   ],
 } as const;
 
+const RenderTexture2DStruct = {
+  struct: [
+    "i16",
+    TextureStruct,
+    TextureStruct,
+  ],
+} as const;
+
 const raylib = Deno.dlopen("./lib/libraylib.so.5.5.0", {
   BeginDrawing: {
     parameters: [],
@@ -283,6 +291,10 @@ const raylib = Deno.dlopen("./lib/libraylib.so.5.5.0", {
     parameters: ["buffer"],
     result: MusicStruct,
   },
+  LoadRenderTexture: {
+    parameters: ["i16", "i16"],
+    result: RenderTexture2DStruct,
+  },
   LoadTexture: {
     parameters: ["buffer"],
     result: TextureStruct,
@@ -324,6 +336,10 @@ const raylib = Deno.dlopen("./lib/libraylib.so.5.5.0", {
     parameters: ["i16"],
     result: "void",
   },
+  SetTextureFilter: {
+    parameters: [TextureStruct, "i16"],
+    result: "void",
+  },
   SetWindowSize: {
     parameters: ["i32", "i32"],
     result: "void",
@@ -342,6 +358,10 @@ const raylib = Deno.dlopen("./lib/libraylib.so.5.5.0", {
   },
   UnloadMusicStream: {
     parameters: [MusicStruct],
+    result: "void",
+  },
+  UnloadRenderTexture: {
+    parameters: [TextureStruct],
     result: "void",
   },
   UpdateMusicStream: {
@@ -459,6 +479,70 @@ export function toTexture(textureBuffer: Uint8Array): Texture {
     mipmaps: view.getInt32(12, true),
     format: view.getInt32(16, true),
   };
+}
+
+function toRenderTexture(renderTexture: Uint8Array): RenderTexture {
+  const buffer = renderTexture.buffer;
+  const byteOffset = renderTexture.byteOffset;
+  const view = new DataView(buffer, byteOffset, renderTexture.byteLength);
+
+  // First field is i16
+  const id = view.getInt16(0, true);
+
+  // TextureStruct starts at offset 2 (u32 + i32 + i32 + i32 + i32) = 20 bytes
+  const texOffset = 2;
+  const texture: Texture = {
+    id: view.getUint32(texOffset + 0, true),
+    width: view.getInt32(texOffset + 4, true),
+    height: view.getInt32(texOffset + 8, true),
+    mipmaps: view.getInt32(texOffset + 12, true),
+    format: view.getInt32(texOffset + 16, true),
+  };
+
+  // Depth texture follows the first TextureStruct (offset 2 + 20 = 22)
+  const depthOffset = texOffset + 20;
+  const depth: Texture = {
+    id: view.getUint32(depthOffset + 0, true),
+    width: view.getInt32(depthOffset + 4, true),
+    height: view.getInt32(depthOffset + 8, true),
+    mipmaps: view.getInt32(depthOffset + 12, true),
+    format: view.getInt32(depthOffset + 16, true),
+  };
+
+  return {
+    id: id,
+    texture: texture,
+    depth: depth,
+  };
+}
+
+function toRaylibRenderTexture(renderTexture: RenderTexture): BufferSource {
+  // RenderTexture2DStruct layout: [i16, TextureStruct, TextureStruct]
+  // TextureStruct: [u32 id, i32 width, i32 height, i32 mipmaps, i32 format] = 20 bytes
+  const SIZE = 2 + 20 + 20; // 42 bytes
+  const buffer = new ArrayBuffer(SIZE);
+  const view = new DataView(buffer);
+
+  // id (i16)
+  view.setInt16(0, renderTexture.id, true);
+
+  const texOffset = 2;
+  const t = renderTexture.texture;
+  view.setUint32(texOffset + 0, t.id, true);
+  view.setInt32(texOffset + 4, t.width, true);
+  view.setInt32(texOffset + 8, t.height, true);
+  view.setInt32(texOffset + 12, t.mipmaps, true);
+  view.setInt32(texOffset + 16, t.format, true);
+
+  const depthOffset = texOffset + 20;
+  const d = renderTexture.depth;
+  view.setUint32(depthOffset + 0, d.id, true);
+  view.setInt32(depthOffset + 4, d.width, true);
+  view.setInt32(depthOffset + 8, d.height, true);
+  view.setInt32(depthOffset + 12, d.mipmaps, true);
+  view.setInt32(depthOffset + 16, d.format, true);
+
+  return new Uint8Array(buffer);
 }
 
 function toFontStruct(font: Font) {
@@ -593,6 +677,12 @@ export interface Texture {
   height: number;
   mipmaps: number;
   format: number;
+}
+
+interface RenderTexture {
+  id: number;
+  texture: Texture;
+  depth: Texture;
 }
 
 export interface AudioStream {
@@ -980,8 +1070,26 @@ export function loadTexture(fileName: string): Texture {
   return toTexture(texture);
 }
 
+export function loadRenderTexture(
+  width: number,
+  height: number,
+): RenderTexture {
+  const renderTexture = raylib.symbols.LoadRenderTexture(width, height);
+  return toRenderTexture(renderTexture);
+}
+
 export function unloadTexture(texture: Texture): void {
   return raylib.symbols.UnloadTexture(toRaylibTexture(texture));
+}
+
+export function unloadRenderTexture(texture: RenderTexture): void {
+  raylib.symbols.UnloadRenderTexture(toRaylibRenderTexture(texture));
+}
+
+// Texture configuration functions
+// ----------------------------------------------------------------------------
+export function setTextureFilter(texture: Texture, filter: number): void {
+  raylib.symbols.SetTextureFilter(toRaylibTexture(texture), filter);
 }
 
 // Gesture and touch handling functions
