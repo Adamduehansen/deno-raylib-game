@@ -13,7 +13,7 @@ import {
   unloadMusicStream,
   updateMusicStream,
   windowShouldClose,
-} from "../raylib-bindings.ts";
+} from "@src/raylib-bindings.ts";
 
 initWindow({
   title: "raylib [audio] example - music stream",

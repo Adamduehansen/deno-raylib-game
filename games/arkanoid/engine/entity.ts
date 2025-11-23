@@ -1,7 +1,7 @@
-import { type Color } from "../raylib-bindings.ts";
+import { type Color } from "@src/raylib-bindings.ts";
 import { EventEmitter } from "./event-emitter.ts";
 import { Renderer, TextRenderer } from "./renderer.ts";
-import { vec, type Vector } from "./math.ts";
+import { vec, type Vector } from "@src/math.ts";
 import { Body } from "./physics.ts";
 import { Scene } from "./scene.ts";
 

@@ -9,7 +9,7 @@ import {
   RayWhite,
   setTargetFPS,
   windowShouldClose,
-} from "../raylib-bindings.ts";
+} from "@src/raylib-bindings.ts";
 import { Text } from "../src/entity.ts";
 import { Scene } from "../src/scene.ts";
 

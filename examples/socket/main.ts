@@ -7,7 +7,7 @@ import {
   initWindow,
   setTargetFPS,
   windowShouldClose,
-} from "../../raylib-bindings.ts";
+} from "@src/raylib-bindings.ts";
 
 if (import.meta.main) {
   const worker = new Worker(

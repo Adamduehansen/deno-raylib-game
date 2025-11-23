@@ -5,8 +5,8 @@ import {
   Green,
   Rectangle,
   Red,
-} from "../raylib-bindings.ts";
-import { vec, Vector } from "./math.ts";
+} from "@src/raylib-bindings.ts";
+import { vec, Vector } from "@src/math.ts";
 
 interface Circle {
   vector: Vector;

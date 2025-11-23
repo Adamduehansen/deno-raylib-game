@@ -1,9 +1,9 @@
-import { Entity } from "@src/entity.ts";
-import { Black, isKeyDown, KeyA, KeyD } from "../../raylib-bindings.ts";
-import { Body } from "@src/physics.ts";
+import { Entity } from "./engine/entity.ts";
+import { Black, isKeyDown, KeyA, KeyD } from "@src/raylib-bindings.ts";
+import { Body } from "./engine/physics.ts";
 import { vec } from "@src/math.ts";
-import { RectangleRenderer } from "@src/renderer.ts";
-import { Scene } from "@src/scene.ts";
+import { RectangleRenderer } from "./engine/renderer.ts";
+import { Scene } from "./engine/scene.ts";
 import { GAME_HEIGHT, GAME_WIDTH } from "./consts.ts";
 
 export class Paddle extends Entity {

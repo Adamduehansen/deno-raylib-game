@@ -5,7 +5,7 @@ import {
   drawTextEx,
   getFontDefault,
   measureText,
-} from "../raylib-bindings.ts";
+} from "@src/raylib-bindings.ts";
 import { Entity, Text } from "./entity.ts";
 
 export abstract class Renderer<TEntity extends Entity> {

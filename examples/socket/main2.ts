@@ -8,7 +8,7 @@ import {
   initWindow,
   setTargetFPS,
   windowShouldClose,
-} from "../../raylib-bindings.ts";
+} from "@src/raylib-bindings.ts";
 
 initWindow({
   title: "Socket test 2",

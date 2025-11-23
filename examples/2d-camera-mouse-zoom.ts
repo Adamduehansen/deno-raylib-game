@@ -38,7 +38,7 @@ import {
   vector2Add,
   vector2Scale,
   windowShouldClose,
-} from "../raylib-bindings.ts";
+} from "@src/raylib-bindings.ts";
 
 if (import.meta.main) {
   const screenWidth = 800;

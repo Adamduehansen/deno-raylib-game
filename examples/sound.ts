@@ -17,7 +17,7 @@ import {
   setTargetFPS,
   unloadSound,
   windowShouldClose,
-} from "../raylib-bindings.ts";
+} from "@src/raylib-bindings.ts";
 import { Timer } from "../src/timer.ts";
 
 initWindow({

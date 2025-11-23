@@ -5,15 +5,15 @@ import {
   isKeyPressed,
   KeyP,
   KeySpace,
-} from "../../raylib-bindings.ts";
-import { Scene } from "@src/scene.ts";
-import { vec } from "@src/math.ts";
-import { Text } from "@src/entity.ts";
+} from "@src/raylib-bindings.ts";
+import { Scene } from "./engine/scene.ts";
+import { Text } from "./engine/entity.ts";
 import { Ball } from "./ball.ts";
 import { Paddle } from "./paddle.ts";
 import { Brick } from "./brick.ts";
 import { Life } from "./life.ts";
-import { Game } from "@src/game.ts";
+import { Game } from "./engine/game.ts";
+import { vec } from "@src/math.ts";
 
 const MAX_LIFES = 1;
 

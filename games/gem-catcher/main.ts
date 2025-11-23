@@ -35,7 +35,7 @@ import {
   updateMusicStream,
   White,
   windowShouldClose,
-} from "../../raylib-bindings.ts";
+} from "@src/raylib-bindings.ts";
 
 let score = 0;
 let paused: boolean = false;

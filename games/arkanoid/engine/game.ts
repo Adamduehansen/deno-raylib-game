@@ -10,7 +10,7 @@ import {
   RayWhite,
   setTargetFPS,
   windowShouldClose,
-} from "../raylib-bindings.ts";
+} from "@src/raylib-bindings.ts";
 import { Scene } from "./scene.ts";
 
 interface GameArgs {

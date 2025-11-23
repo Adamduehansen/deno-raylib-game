@@ -1,3 +1,4 @@
+import { Vector } from "@src/math.ts";
 import {
   beginDrawing,
   beginTextureMode,
@@ -30,8 +31,7 @@ import {
   unloadRenderTexture,
   White,
   windowShouldClose,
-} from "../raylib-bindings.ts";
-import { Vector } from "@src/math.ts";
+} from "@src/raylib-bindings.ts";
 
 interface Map {
   tilesX: number; // Number of tiles in X axis

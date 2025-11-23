@@ -1,7 +1,7 @@
-import { LightGray } from "../../raylib-bindings.ts";
-import { Entity } from "@src/entity.ts";
+import { LightGray } from "@src/raylib-bindings.ts";
+import { Entity } from "./engine/entity.ts";
 import { Vector } from "@src/math.ts";
-import { RectangleRenderer } from "@src/renderer.ts";
+import { RectangleRenderer } from "./engine/renderer.ts";
 
 const WIDTH = 40;
 const HEIGHT = 10;

@@ -9,8 +9,8 @@ import {
   RayWhite,
   setTargetFPS,
   windowShouldClose,
-} from "../raylib-bindings.ts";
-import { Timer } from "../src/timer.ts";
+} from "@src/raylib-bindings.ts";
+import { Timer } from "@src/timer.ts";
 
 initWindow({
   title: "Timer example",

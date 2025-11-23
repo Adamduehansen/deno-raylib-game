@@ -1,7 +1,7 @@
 import {
   checkCollisionCircleRec,
   checkCollisionRecs,
-} from "../raylib-bindings.ts";
+} from "@src/raylib-bindings.ts";
 import { Entity } from "./entity.ts";
 import { EventEmitter } from "./event-emitter.ts";
 import { Game } from "./game.ts";
