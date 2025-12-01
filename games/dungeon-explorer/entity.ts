@@ -15,7 +15,6 @@ interface EntityArgs {
   position: Vector;
   spriteIndex: Vector;
   name: string;
-  z: number;
 }
 
 export default abstract class Entity {
@@ -23,7 +22,6 @@ export default abstract class Entity {
   private _spriteIndex: Vector;
 
   position: Vector;
-  z: number;
 
   readonly name: string;
 
@@ -35,11 +33,9 @@ export default abstract class Entity {
     this.position = args.position;
     this._spriteIndex = args.spriteIndex;
     this.name = args.name;
-    this.z = args.z;
   }
 
-  update(): void {
-  }
+  update(): void {}
 
   render(): void {
     const textureMargin = 1;
@@ -73,7 +69,6 @@ export class Player extends Entity {
       position: args.position,
       spriteIndex: vec(4, 0),
       name: "player",
-      z: 10,
     });
   }
 
@@ -100,7 +95,6 @@ export class Beholder extends Entity {
       position: args.position,
       spriteIndex: vec(13, 0),
       name: "beholder",
-      z: 10,
     });
   }
 }
@@ -111,7 +105,6 @@ export class Wall extends Entity {
       position: args.position,
       spriteIndex: vec(1, 0),
       name: "wall",
-      z: 0,
     });
   }
 }
@@ -122,7 +115,6 @@ export class Floor extends Entity {
       position: args.position,
       spriteIndex: vec(1, 1),
       name: "floor",
-      z: 0,
     });
   }
 }

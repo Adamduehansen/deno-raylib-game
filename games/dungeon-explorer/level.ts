@@ -1,5 +1,5 @@
 import { vec } from "@src/math.ts";
-import Entity, { Beholder, Floor, Player, Wall } from "./entity.ts";
+import Entity, { Floor, Player, Wall } from "./entity.ts";
 import {
   beginMode2D,
   Camera,
@@ -9,9 +9,7 @@ import {
   Vector,
 } from "@src/r-core.ts";
 
-type LevelLayout = EntityKey[][];
-
-type EntityKey = "w" | "f" | "p" | "b";
+type EntityKey = "w" | "f";
 
 class EntityFactory {
   get(
@@ -27,31 +25,34 @@ class EntityFactory {
         return new Floor({
           position: position,
         });
-      case "p":
-        return new Player({
-          position: position,
-        });
-      case "b":
-        return new Beholder({
-          position: position,
-        });
     }
   }
 }
 
+type LevelLayout = EntityKey[][];
+
+interface LevelArgs {
+  levelLayout: LevelLayout;
+  playerSpawnPosition: Vector;
+}
+
 abstract class Level {
-  private _entities: Entity[];
   private _entityFactory = new EntityFactory();
+
+  private _player: Player;
+  private _levelLayout: Entity[];
   private _camera: Camera;
 
-  constructor(layout: LevelLayout) {
-    this._entities = this._parseLayout(layout);
+  constructor({ levelLayout, playerSpawnPosition }: LevelArgs) {
+    this._levelLayout = this._parseLevelLayout(levelLayout);
 
-    const player = this._entities.find((entity) => entity.name === "player")!;
+    this._player = new Player({
+      position: playerSpawnPosition,
+    });
     this._camera = {
       target: {
-        x: player.position.x,
-        y: player.position.y,
+        x: this._player.position.x,
+        y: this._player.position.y,
       },
       offset: {
         x: getScreenWidth() / 2,
@@ -63,28 +64,31 @@ abstract class Level {
   }
 
   update(): void {
-    for (const entity of this._entities) {
+    for (const entity of this._levelLayout) {
       entity.update();
     }
 
-    const player = this._entities.find((entity) => entity.name === "player")!;
+    this._player.update();
+
     this._camera.target = {
-      x: player.position.x,
-      y: player.position.y,
+      x: this._player.position.x,
+      y: this._player.position.y,
     };
   }
 
   render(): void {
     beginMode2D(this._camera);
 
-    for (const entity of this._entities) {
+    for (const entity of this._levelLayout) {
       entity.render();
     }
+
+    this._player.render();
 
     endMode2D();
   }
 
-  private _parseLayout(levelLayout: LevelLayout): Entity[] {
+  private _parseLevelLayout(levelLayout: LevelLayout): Entity[] {
     const entities: Entity[] = [];
     for (let rowIndex = 0; rowIndex < levelLayout.length; rowIndex++) {
       const row = levelLayout[rowIndex];
@@ -96,20 +100,28 @@ abstract class Level {
       }
     }
 
-    return entities.toSorted((entityA, entityB) => entityA.z - entityB.z);
+    return entities;
   }
 }
 
 export class Level1 extends Level {
   constructor() {
-    super([
-      ["w", "w", "w", "w", "w", "w", "w"],
-      ["w", "f", "f", "f", "f", "f", "w"],
-      ["w", "f", "p", "f", "f", "f", "w"],
-      ["w", "f", "f", "f", "f", "f", "w"],
-      ["w", "f", "f", "f", "b", "f", "w"],
-      ["w", "f", "f", "f", "f", "f", "w"],
-      ["w", "w", "w", "w", "w", "w", "w"],
-    ]);
+    super({
+      levelLayout: [
+        ["w", "w", "w", "w", "w", "w", "w", "w", "w", "w", "w", "w"],
+        ["w", "f", "f", "f", "f", "f", "f", "f", "f", "f", "f", "w"],
+        ["w", "f", "f", "f", "f", "f", "f", "f", "f", "f", "f", "w"],
+        ["w", "f", "f", "f", "f", "f", "f", "f", "f", "f", "f", "w"],
+        ["w", "f", "f", "f", "f", "f", "f", "f", "f", "f", "f", "w"],
+        ["w", "f", "f", "f", "f", "f", "f", "f", "f", "f", "f", "w"],
+        ["w", "f", "f", "f", "f", "f", "f", "f", "f", "f", "f", "w"],
+        ["w", "f", "f", "f", "f", "f", "f", "f", "f", "f", "f", "w"],
+        ["w", "f", "f", "f", "f", "f", "f", "f", "f", "f", "f", "w"],
+        ["w", "f", "f", "f", "f", "f", "f", "f", "f", "f", "f", "w"],
+        ["w", "f", "f", "f", "f", "f", "f", "f", "f", "f", "f", "w"],
+        ["w", "w", "w", "w", "w", "w", "w", "w", "w", "w", "w", "w"],
+      ],
+      playerSpawnPosition: vec(2 * 8, 2 * 8),
+    });
   }
 }
