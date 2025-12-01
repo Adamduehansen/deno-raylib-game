@@ -1,5 +1,5 @@
 import { vec } from "@src/math.ts";
-import Entity, { Beholder, Floor, Player, Wall } from "./entity.ts";
+import Entity, { Beholder, Corner, Floor, Player, Wall } from "./entity.ts";
 import {
   beginMode2D,
   Camera,
@@ -9,7 +9,7 @@ import {
   Vector,
 } from "@src/r-core.ts";
 
-type EntityKey = "w" | "f" | "b";
+type EntityKey = "f" | "b" | "cul" | "cur" | "cll" | "clr" | "ws" | "wl" | "wr";
 
 interface FactoryEntityProps {
   position: Vector;
@@ -22,10 +22,23 @@ class EntityFactory {
     props: FactoryEntityProps,
   ): Entity | never {
     switch (entityKey) {
-      case "w":
+      case "ws":
         return new Wall({
           position: props.position,
           level: props.level,
+          variant: "SIDE",
+        });
+      case "wl":
+        return new Wall({
+          position: props.position,
+          level: props.level,
+          variant: "LEFT",
+        });
+      case "wr":
+        return new Wall({
+          position: props.position,
+          level: props.level,
+          variant: "RIGHT",
         });
       case "f":
         return new Floor({
@@ -36,6 +49,30 @@ class EntityFactory {
         return new Beholder({
           position: props.position,
           level: props.level,
+        });
+      case "cll":
+        return new Corner({
+          position: props.position,
+          level: props.level,
+          variant: "LOWER_LEFT",
+        });
+      case "cul":
+        return new Corner({
+          position: props.position,
+          level: props.level,
+          variant: "UPPER_LEFT",
+        });
+      case "cur":
+        return new Corner({
+          position: props.position,
+          level: props.level,
+          variant: "UPPER_RIGHT",
+        });
+      case "clr":
+        return new Corner({
+          position: props.position,
+          level: props.level,
+          variant: "LOWER_RIGHT",
         });
     }
   }
@@ -150,18 +187,44 @@ export class Level1 extends Level {
   constructor() {
     super({
       levelLayout: [
-        ["w", "w", "w", "w", "w", "w", "w", "w", "w", "w", "w", "w"],
-        ["w", "f", "f", "f", "f", "f", "f", "f", "f", "f", "f", "w"],
-        ["w", "f", "f", "f", "f", "f", "f", "f", "f", "f", "f", "w"],
-        ["w", "f", "f", "f", "f", "f", "f", "f", "f", "f", "f", "w"],
-        ["w", "f", "f", "f", "f", "f", "f", "f", "f", "f", "f", "w"],
-        ["w", "f", "f", "f", "f", "f", "f", "f", "f", "f", "f", "w"],
-        ["w", "f", "f", "f", "f", "f", "f", "f", "f", "f", "f", "w"],
-        ["w", "f", "f", "f", "f", "f", "f", "f", "f", "f", "f", "w"],
-        ["w", "f", "f", "f", "f", "f", "f", "f", "f", "f", "f", "w"],
-        ["w", "f", "f", "f", "f", "f", "f", "f", "f", "f", "f", "w"],
-        ["w", "f", "f", "f", "f", "f", "f", "f", "f", "f", "f", "w"],
-        ["w", "w", "w", "w", "w", "w", "w", "w", "w", "w", "w", "w"],
+        [
+          "cul",
+          "ws",
+          "ws",
+          "ws",
+          "ws",
+          "ws",
+          "ws",
+          "ws",
+          "ws",
+          "ws",
+          "ws",
+          "cur",
+        ],
+        ["wl", "f", "f", "f", "f", "f", "f", "f", "f", "f", "f", "wr"],
+        ["wl", "f", "f", "f", "f", "f", "f", "f", "f", "f", "f", "wr"],
+        ["wl", "f", "f", "f", "f", "f", "f", "f", "f", "f", "f", "wr"],
+        ["wl", "f", "f", "f", "f", "f", "f", "f", "f", "f", "f", "wr"],
+        ["wl", "f", "f", "f", "f", "f", "f", "f", "f", "f", "f", "wr"],
+        ["wl", "f", "f", "f", "f", "f", "f", "f", "f", "f", "f", "wr"],
+        ["wl", "f", "f", "f", "f", "f", "f", "f", "f", "f", "f", "wr"],
+        ["wl", "f", "f", "f", "f", "f", "f", "f", "f", "f", "f", "wr"],
+        ["wl", "f", "f", "f", "f", "f", "f", "f", "f", "f", "f", "wr"],
+        ["wl", "f", "f", "f", "f", "f", "f", "f", "f", "f", "f", "wr"],
+        [
+          "cll",
+          "ws",
+          "ws",
+          "ws",
+          "ws",
+          "ws",
+          "ws",
+          "ws",
+          "ws",
+          "ws",
+          "ws",
+          "clr",
+        ],
       ],
       playerSpawnPosition: vec(2 * 8, 2 * 8),
       enemies: [{

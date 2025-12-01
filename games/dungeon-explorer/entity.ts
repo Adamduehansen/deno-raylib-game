@@ -55,7 +55,7 @@ class Body {
 interface EntityArgs {
   position: Vector;
   spriteIndex: Vector;
-  name: string;
+  name?: string;
   collide: boolean;
   level: Level;
 }
@@ -70,7 +70,7 @@ export default abstract class Entity {
 
   flipHorizontal: boolean = false;
 
-  readonly name: string;
+  readonly name?: string;
   readonly body?: Body;
 
   constructor(args: EntityArgs) {
@@ -214,13 +214,46 @@ export class Beholder extends Entity {
   }
 }
 
+interface WallArgs extends Args {
+  variant: "LEFT" | "RIGHT" | "SIDE";
+}
+
+const WallSpriteMap: { [key in WallArgs["variant"]]: Vector } = {
+  LEFT: vec(0, 1),
+  RIGHT: vec(3, 1),
+  SIDE: vec(1, 0),
+};
+
 export class Wall extends Entity {
-  constructor(args: Args) {
+  constructor(args: WallArgs) {
     super({
       position: args.position,
       level: args.level,
-      spriteIndex: vec(1, 0),
+      spriteIndex: WallSpriteMap[args.variant],
       name: "wall",
+      collide: true,
+    });
+  }
+}
+
+interface CornorArgs extends Args {
+  variant: "UPPER_LEFT" | "UPPER_RIGHT" | "LOWER_LEFT" | "LOWER_RIGHT";
+}
+
+const CornerSpriteMap: { [key in CornorArgs["variant"]]: Vector } = {
+  UPPER_LEFT: vec(0, 0),
+  UPPER_RIGHT: vec(3, 0),
+  LOWER_LEFT: vec(0, 2),
+  LOWER_RIGHT: vec(3, 2),
+};
+
+export class Corner extends Entity {
+  constructor(args: CornorArgs) {
+    super({
+      position: args.position,
+      level: args.level,
+      spriteIndex: CornerSpriteMap[args.variant],
+      name: "",
       collide: true,
     });
   }
