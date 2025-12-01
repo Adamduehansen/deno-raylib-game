@@ -1,5 +1,13 @@
 import { vec } from "@src/math.ts";
-import Entity, { Beholder, Corner, Floor, Player, Wall } from "./entity.ts";
+import Entity, {
+  Beholder,
+  Corner,
+  Floor,
+  Player,
+  StairsDown,
+  StairsUp,
+  Wall,
+} from "./entity.ts";
 import {
   beginMode2D,
   Camera,
@@ -8,7 +16,8 @@ import {
   getScreenWidth,
   Vector,
 } from "@src/r-core.ts";
-import level1 from "./level1.txt" with { type: "text" };
+import level1Layout from "./level1.txt" with { type: "text" };
+import level2Layout from "./level2.txt" with { type: "text" };
 
 interface FactoryEntityProps {
   position: Vector;
@@ -73,8 +82,18 @@ class EntityFactory {
           level: props.level,
           variant: "LOWER_RIGHT",
         });
+      case "su":
+        return new StairsUp({
+          position: props.position,
+          level: props.level,
+        });
+      case "sd":
+        return new StairsDown({
+          position: props.position,
+          level: props.level,
+        });
       default:
-        throw new Error("");
+        throw new Error(`Not implemented key "${entityKey}"`);
     }
   }
 }
@@ -88,6 +107,7 @@ interface LevelArgs {
   levelLayout: string;
   playerSpawnPosition: Vector;
   enemies: LevelEnemy[];
+  levelManager: LevelManager;
 }
 
 export default abstract class Level {
@@ -95,11 +115,19 @@ export default abstract class Level {
 
   private _camera: Camera;
   private _enemies: Entity[];
+  private readonly _levelManager: LevelManager;
 
   readonly player: Player;
   readonly levelLayout: Entity[];
 
-  constructor({ levelLayout, playerSpawnPosition, enemies }: LevelArgs) {
+  constructor({
+    levelLayout,
+    playerSpawnPosition,
+    enemies,
+    levelManager,
+  }: LevelArgs) {
+    this._levelManager = levelManager;
+
     this.levelLayout = this._parseLevelLayout(levelLayout);
     this._enemies = this._parseEnemies(enemies);
 
@@ -154,6 +182,14 @@ export default abstract class Level {
     endMode2D();
   }
 
+  goUpstairs(): void {
+    this._levelManager.setLevel("level2");
+  }
+
+  goDownstairs(): void {
+    this._levelManager.setLevel("level1");
+  }
+
   private _parseLevelLayout(levelLayout: string): Entity[] {
     const entities: Entity[] = [];
     const rows = levelLayout.split("\n");
@@ -185,14 +221,43 @@ export default abstract class Level {
 }
 
 export class Level1 extends Level {
-  constructor() {
+  constructor(levelManager: LevelManager) {
     super({
-      levelLayout: level1,
+      levelLayout: level1Layout,
       playerSpawnPosition: vec(2 * 8, 2 * 8),
+      levelManager: levelManager,
       enemies: [{
         entityKey: "b",
-        position: vec(4 * 8, 4 * 8),
+        position: vec(8 * 8, 8 * 8),
       }],
     });
+  }
+}
+
+export class Level2 extends Level {
+  constructor(levelManager: LevelManager) {
+    super({
+      levelLayout: level2Layout,
+      playerSpawnPosition: vec(8 * 8, 4 * 8),
+      levelManager: levelManager,
+      enemies: [],
+    });
+  }
+}
+
+export class LevelManager {
+  currentLevel: Level;
+
+  readonly levels = {
+    "level1": new Level1(this),
+    "level2": new Level2(this),
+  } as const;
+
+  constructor() {
+    this.currentLevel = this.levels["level1"];
+  }
+
+  setLevel(level: keyof typeof this.levels) {
+    this.currentLevel = this.levels[level];
   }
 }

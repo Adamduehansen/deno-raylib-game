@@ -1,8 +1,8 @@
 cul,  ws, ws, ws, ws, ws, ws, ws, ws, ws, ws, cur
 wl,   f,  f,  f,  f,  f,  f,  f,  f,  f,  f,  wr
-wl,   f,  f,  f,  f,  f,  f,  f,  f,  su, f,  wr
 wl,   f,  f,  f,  f,  f,  f,  f,  f,  f,  f,  wr
 wl,   f,  f,  f,  f,  f,  f,  f,  f,  f,  f,  wr
+wl,   f,  f,  f,  f,  f,  f,  f,  f,  sd, f,  wr
 wl,   f,  f,  f,  f,  f,  f,  f,  f,  f,  f,  wr
 wl,   f,  f,  f,  f,  f,  f,  f,  f,  f,  f,  wr
 wl,   f,  f,  f,  f,  f,  f,  f,  f,  f,  f,  wr

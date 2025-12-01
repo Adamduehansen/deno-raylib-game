@@ -56,7 +56,7 @@ interface EntityArgs {
   position: Vector;
   spriteIndex: Vector;
   name?: string;
-  collide: boolean;
+  collide?: boolean;
   level: Level;
 }
 
@@ -266,7 +266,50 @@ export class Floor extends Entity {
       level: args.level,
       spriteIndex: vec(1, 1),
       name: "floor",
-      collide: false,
     });
+  }
+}
+
+export class StairsUp extends Entity {
+  constructor(args: Args) {
+    super({
+      position: args.position,
+      level: args.level,
+      spriteIndex: vec(5, 3),
+      collide: true,
+    });
+  }
+
+  override update(): void {
+    if (
+      checkCollisionRecs(
+        this.level.player.body!.getBounds(),
+        this.body!.getBounds(),
+      )
+    ) {
+      this.level.goUpstairs();
+    }
+  }
+}
+
+export class StairsDown extends Entity {
+  constructor(args: Args) {
+    super({
+      position: args.position,
+      level: args.level,
+      spriteIndex: vec(4, 3),
+      collide: true,
+    });
+  }
+
+  override update(): void {
+    if (
+      checkCollisionRecs(
+        this.level.player.body!.getBounds(),
+        this.body!.getBounds(),
+      )
+    ) {
+      this.level.goDownstairs();
+    }
   }
 }

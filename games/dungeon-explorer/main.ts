@@ -9,7 +9,7 @@ import {
   windowShouldClose,
 } from "@src/r-core.ts";
 import ResourceManager, { TextureResource } from "./resource-manager.ts";
-import { Level1 } from "./level.ts";
+import { LevelManager } from "./level.ts";
 import { drawFPS } from "@src/r-text.ts";
 
 const screenWidth = 800;
@@ -28,12 +28,12 @@ ResourceManager.getInstance().load(
   new TextureResource("./games/dungeon-explorer/spritesheet.png"),
 );
 
-const level = new Level1();
+const levelManager = new LevelManager();
 
 while (windowShouldClose() === false) {
   // Update
   // --------------------------------------------------------------------------
-  level.update();
+  levelManager.currentLevel.update();
 
   // Draw
   // --------------------------------------------------------------------------
@@ -43,7 +43,7 @@ while (windowShouldClose() === false) {
 
   drawFPS(0, 0);
 
-  level.render();
+  levelManager.currentLevel.render();
 
   endDrawing();
 }
