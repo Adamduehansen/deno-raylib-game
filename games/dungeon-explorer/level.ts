@@ -1,5 +1,5 @@
 import { vec } from "@src/math.ts";
-import Entity, { Floor, Player, Wall } from "./entity.ts";
+import Entity, { Beholder, Floor, Player, Wall } from "./entity.ts";
 import {
   beginMode2D,
   Camera,
@@ -9,7 +9,7 @@ import {
   Vector,
 } from "@src/r-core.ts";
 
-type EntityKey = "w" | "f";
+type EntityKey = "w" | "f" | "b";
 
 interface FactoryEntityProps {
   position: Vector;
@@ -32,15 +32,26 @@ class EntityFactory {
           position: props.position,
           level: props.level,
         });
+      case "b":
+        return new Beholder({
+          position: props.position,
+          level: props.level,
+        });
     }
   }
 }
 
 type LevelLayout = EntityKey[][];
 
+interface LevelEnemy {
+  entityKey: EntityKey;
+  position: Vector;
+}
+
 interface LevelArgs {
   levelLayout: LevelLayout;
   playerSpawnPosition: Vector;
+  enemies: LevelEnemy[];
 }
 
 export default abstract class Level {
@@ -48,11 +59,13 @@ export default abstract class Level {
 
   private _player: Player;
   private _camera: Camera;
+  private _enemies: Entity[];
 
   readonly levelLayout: Entity[];
 
-  constructor({ levelLayout, playerSpawnPosition }: LevelArgs) {
+  constructor({ levelLayout, playerSpawnPosition, enemies }: LevelArgs) {
     this.levelLayout = this._parseLevelLayout(levelLayout);
+    this._enemies = this._parseEnemies(enemies);
 
     this._player = new Player({
       position: playerSpawnPosition,
@@ -73,8 +86,12 @@ export default abstract class Level {
   }
 
   update(): void {
-    for (const entity of this.levelLayout) {
-      entity.update();
+    for (const levelLayout of this.levelLayout) {
+      levelLayout.update();
+    }
+
+    for (const enemy of this._enemies) {
+      enemy.update();
     }
 
     this._player.update();
@@ -88,8 +105,12 @@ export default abstract class Level {
   render(): void {
     beginMode2D(this._camera);
 
-    for (const entity of this.levelLayout) {
-      entity.render();
+    for (const levelLayout of this.levelLayout) {
+      levelLayout.render();
+    }
+
+    for (const enemy of this._enemies) {
+      enemy.render();
     }
 
     this._player.render();
@@ -114,6 +135,15 @@ export default abstract class Level {
 
     return entities;
   }
+
+  private _parseEnemies(enemies: LevelEnemy[]): Entity[] {
+    return enemies.map((enemy) =>
+      this._entityFactory.get(enemy.entityKey, {
+        position: enemy.position,
+        level: this,
+      })
+    );
+  }
 }
 
 export class Level1 extends Level {
@@ -134,6 +164,10 @@ export class Level1 extends Level {
         ["w", "w", "w", "w", "w", "w", "w", "w", "w", "w", "w", "w"],
       ],
       playerSpawnPosition: vec(2 * 8, 2 * 8),
+      enemies: [{
+        entityKey: "b",
+        position: vec(4 * 8, 4 * 8),
+      }],
     });
   }
 }
