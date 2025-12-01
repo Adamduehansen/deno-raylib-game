@@ -13,6 +13,7 @@ import { drawTextureRec } from "@src/r-textures.ts";
 import { Rectangle, vec } from "@src/math.ts";
 import { checkCollisionRecs, drawRectangleLinesEx } from "@src/r-shapes.ts";
 import Level from "./level.ts";
+import { DEBUG } from "./settings.ts";
 
 class Body {
   private readonly _owner: Entity;
@@ -111,7 +112,9 @@ export default abstract class Entity {
       },
     });
 
-    this.body?.render();
+    if (DEBUG) {
+      this.body?.render();
+    }
   }
 }
 
