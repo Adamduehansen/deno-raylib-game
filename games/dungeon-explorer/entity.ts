@@ -26,10 +26,9 @@ export default abstract class Entity {
   readonly name: string;
 
   constructor(args: EntityArgs) {
-    this._textureResource = ResourceManager.getInstance().get(
+    this._textureResource = ResourceManager.getInstance().get<TextureResource>(
       "spritesheet",
-      // TODO: Fix this casting!
-    ) as unknown as TextureResource;
+    );
     this.position = args.position;
     this._spriteIndex = args.spriteIndex;
     this.name = args.name;

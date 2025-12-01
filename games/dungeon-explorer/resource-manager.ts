@@ -75,13 +75,13 @@ export default class ResourceManager {
     this.#resources.set(key, resource);
   }
 
-  get(key: string): Resource {
+  get<T extends Resource>(key: string): T {
     const resource = this.#resources.get(key);
     if (resource === undefined) {
       throw new Error(`Coule not get resource "${key}". Is it loaded?`);
     }
 
-    return resource;
+    return resource as T;
   }
 
   unload(): void {
