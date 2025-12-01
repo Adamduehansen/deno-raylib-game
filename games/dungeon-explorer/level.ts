@@ -57,24 +57,24 @@ interface LevelArgs {
 export default abstract class Level {
   private _entityFactory = new EntityFactory();
 
-  private _player: Player;
   private _camera: Camera;
   private _enemies: Entity[];
 
+  readonly player: Player;
   readonly levelLayout: Entity[];
 
   constructor({ levelLayout, playerSpawnPosition, enemies }: LevelArgs) {
     this.levelLayout = this._parseLevelLayout(levelLayout);
     this._enemies = this._parseEnemies(enemies);
 
-    this._player = new Player({
+    this.player = new Player({
       position: playerSpawnPosition,
       level: this,
     });
     this._camera = {
       target: {
-        x: this._player.position.x,
-        y: this._player.position.y,
+        x: this.player.position.x,
+        y: this.player.position.y,
       },
       offset: {
         x: getScreenWidth() / 2,
@@ -94,11 +94,11 @@ export default abstract class Level {
       enemy.update();
     }
 
-    this._player.update();
+    this.player.update();
 
     this._camera.target = {
-      x: this._player.position.x,
-      y: this._player.position.y,
+      x: this.player.position.x,
+      y: this.player.position.y,
     };
   }
 
@@ -113,7 +113,7 @@ export default abstract class Level {
       enemy.render();
     }
 
-    this._player.render();
+    this.player.render();
 
     endMode2D();
   }

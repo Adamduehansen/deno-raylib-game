@@ -68,6 +68,8 @@ export default abstract class Entity {
   position: Vector;
   velocity: Vector;
 
+  flipHorizontal: boolean = false;
+
   readonly name: string;
   readonly body?: Body;
 
@@ -102,8 +104,8 @@ export default abstract class Entity {
       rectangle: {
         x: 8 * this._spriteIndex.x + textureSpacing * this._spriteIndex.x,
         y: 8 * this._spriteIndex.y + textureSpacing * this._spriteIndex.y,
+        width: this.flipHorizontal ? -8 : 8,
         height: 8,
-        width: 8,
       },
       color: White,
       vector: {
@@ -183,6 +185,32 @@ export class Beholder extends Entity {
       name: "beholder",
       collide: true,
     });
+  }
+
+  override update(): void {
+    super.update();
+
+    if (this.position.x < this.level.player.position.x) {
+      this.velocity.x = 0.2;
+    } else if (this.position.x > this.level.player.position.x) {
+      this.velocity.x = -0.2;
+    } else {
+      this.velocity.x = 0;
+    }
+
+    if (this.position.y < this.level.player.position.y) {
+      this.velocity.y = 0.2;
+    } else if (this.position.y > this.level.player.position.y) {
+      this.velocity.y = -0.2;
+    } else {
+      this.velocity.y = 0;
+    }
+
+    if (this.level.player.position.x + 1 > this.position.x) {
+      this.flipHorizontal = true;
+    } else {
+      this.flipHorizontal = false;
+    }
   }
 }
 
