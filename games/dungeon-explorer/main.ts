@@ -1,53 +1,20 @@
-import {
-  beginDrawing,
-  Black,
-  clearBackground,
-  closeWindow,
-  endDrawing,
-  initWindow,
-  setTargetFPS,
-  windowShouldClose,
-} from "@src/r-core.ts";
-import ResourceManager, { TextureResource } from "./resource-manager.ts";
-import { LevelManager } from "./level.ts";
-import { drawFPS } from "@src/r-text.ts";
+import Game from "@src/game.ts";
+import { ResourceManager } from "@src/resource.ts";
+import { Resources } from "./resources.ts";
 
 const screenWidth = 800;
 const screenHeight = 450;
 
-initWindow({
+const game = new Game({
   title: "Dungeon Explorer",
   width: screenWidth,
   height: screenHeight,
+  fps: 60,
+  resourceManager: new ResourceManager(Object.values(Resources)),
 });
 
-setTargetFPS(60);
+game.initialize();
 
-ResourceManager.getInstance().load(
-  "spritesheet",
-  new TextureResource("./games/dungeon-explorer/spritesheet.png"),
-);
+game.run();
 
-const levelManager = new LevelManager();
-
-while (windowShouldClose() === false) {
-  // Update
-  // --------------------------------------------------------------------------
-  levelManager.currentLevel.update();
-
-  // Draw
-  // --------------------------------------------------------------------------
-  beginDrawing();
-
-  clearBackground(Black);
-
-  drawFPS(0, 0);
-
-  levelManager.currentLevel.render();
-
-  endDrawing();
-}
-
-ResourceManager.getInstance().unload();
-
-closeWindow();
+game.close();
