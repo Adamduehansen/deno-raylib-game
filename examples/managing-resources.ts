@@ -10,7 +10,7 @@ import {
   windowShouldClose,
 } from "@src/r-core.ts";
 import { closeAudioDevice, initAudioDevice } from "@src/r-audio.ts";
-import { Graphics, Sprite } from "@src/graphics.ts";
+import { Graphics, SpriteSheet } from "@src/graphics.ts";
 
 initWindow({
   title: "Examples - managing resources",
@@ -25,7 +25,7 @@ initAudioDevice();
 const resourceFolderPath = import.meta.dirname + "/resources";
 
 const Resources = {
-  spritesheetImage: new Image(resourceFolderPath + "/scarfy.png"),
+  spritesheetImage: new Image(resourceFolderPath + "/spritesheet.png"),
   sound: new Sound(resourceFolderPath + "/boom.wav"),
 } as const;
 
@@ -33,18 +33,19 @@ const resourceManager = new ResourceManager(Object.values(Resources));
 
 resourceManager.load();
 
-const sprite = new Sprite({
-  image: Resources.spritesheetImage,
-  sourceView: {
-    x: 0,
-    y: 0,
-    height: 128,
-    width: 128,
+const spriteSheet = SpriteSheet.fromImage(Resources.spritesheetImage, {
+  columns: 16,
+  rows: 10,
+  spriteHeight: 8,
+  spriteWidth: 8,
+  spacing: {
+    x: 1,
+    y: 1,
   },
 });
 
 const graphics = new Graphics();
-graphics.use(sprite);
+graphics.use(spriteSheet.getSprite(4, 1));
 
 while (windowShouldClose() === false) {
   beginDrawing();
