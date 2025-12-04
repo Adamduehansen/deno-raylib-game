@@ -5,7 +5,7 @@ import { Paddle } from "./paddle.ts";
 import { Brick } from "./brick.ts";
 import { Life } from "./life.ts";
 import { Game } from "./engine/game.ts";
-import { vec } from "@src/math.ts";
+import { vec } from "@src/r-math.ts";
 import {
   DarkGray,
   getScreenHeight,

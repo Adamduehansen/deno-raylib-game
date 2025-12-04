@@ -3,7 +3,7 @@ import { Renderer, TextRenderer } from "./renderer.ts";
 import { Body } from "./physics.ts";
 import { Scene } from "./scene.ts";
 import { Color, Vector } from "@src/r-core.ts";
-import { vec } from "@src/math.ts";
+import { vec } from "@src/r-math.ts";
 
 interface EntityArgs {
   pos: Vector;

@@ -1,4 +1,4 @@
-import { vec } from "@src/math.ts";
+import { vec } from "@src/r-math.ts";
 import Entity, {
   Beholder,
   Corner,

@@ -1,4 +1,4 @@
-import { Rectangle } from "@src/math.ts";
+import { Rectangle } from "@src/r-shapes.ts";
 import {
   closeAudioDevice,
   initAudioDevice,

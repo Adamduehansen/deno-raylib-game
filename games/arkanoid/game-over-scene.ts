@@ -1,6 +1,6 @@
 import { Scene } from "./engine/scene.ts";
 import { Text } from "./engine/entity.ts";
-import { vec } from "@src/math.ts";
+import { vec } from "@src/r-math.ts";
 import { Game } from "./engine/game.ts";
 import { Gray, isKeyPressed, KeyEnter } from "@src/r-core.ts";
 

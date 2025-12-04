@@ -35,7 +35,7 @@ import {
   rlTranslatef,
   vector2Add,
   vector2Scale,
-} from "@src/math.ts";
+} from "@src/r-math.ts";
 import { drawGrid } from "@src/r-models.ts";
 import { drawCircle, drawCircleV } from "@src/r-shapes.ts";
 import { drawTextEx, getFontDefault } from "@src/r-text.ts";

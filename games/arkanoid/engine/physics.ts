@@ -1,9 +1,10 @@
-import { Rectangle, vec } from "@src/math.ts";
+import { vec } from "@src/r-math.ts";
 import { Green, Red, Vector } from "@src/r-core.ts";
 import {
   drawCircleLinesV,
   drawCircleV,
   drawRectangleLinesEx,
+  Rectangle,
 } from "@src/r-shapes.ts";
 
 interface Circle {

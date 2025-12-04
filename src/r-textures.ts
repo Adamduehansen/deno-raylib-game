@@ -9,7 +9,7 @@ import {
   toRaylibVector2,
   Vector,
 } from "./r-core.ts";
-import { Rectangle, toRaylibRectangle } from "./math.ts";
+import { Rectangle, toRaylibRectangle } from "./r-shapes.ts";
 
 //-----------------------------------------------------------------------------
 // Converters

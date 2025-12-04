@@ -35,7 +35,7 @@ import {
   drawRectangleRec,
 } from "@src/r-shapes.ts";
 import { drawText } from "@src/r-text.ts";
-import { Rectangle } from "@src/math.ts";
+import { Rectangle } from "@src/r-shapes.ts";
 
 const maxBuildings = 100;
 

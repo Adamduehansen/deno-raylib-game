@@ -1,6 +1,7 @@
-import { Rectangle, vec } from "./math.ts";
+import { vec } from "./r-math.ts";
 import { Vector, White } from "./r-core.ts";
 import { drawTextureRec } from "./r-textures.ts";
+import { Rectangle } from "./r-shapes.ts";
 import { Image } from "./resource.ts";
 
 interface Graphic {

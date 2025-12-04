@@ -1,13 +1,6 @@
 import { toRaylibVector2, toVector, Vector } from "./r-core.ts";
 import { raylib } from "./raylib-bindings.ts";
 
-export interface Rectangle {
-  x: number;
-  y: number;
-  width: number;
-  height: number;
-}
-
 /**
  * TODO
  */
@@ -48,10 +41,6 @@ export function rlRotatef(
   raylib.symbols.rlRotatef(angle, x, y, z);
 }
 
-export function toRaylibRectangle(rec: Rectangle): BufferSource {
-  return new Float32Array([rec.x, rec.y, rec.width, rec.height]);
-}
-
 export function vec(x: number, y: number): Vector {
   return {
     x: x,
@@ -60,7 +49,7 @@ export function vec(x: number, y: number): Vector {
 }
 
 /**
- * TODO:
+ * Scale vector (multiply by value)
  */
 export function vector2Scale(vector: Vector, scale: number): Vector {
   return toVector(raylib.symbols.Vector2Scale(
@@ -70,7 +59,7 @@ export function vector2Scale(vector: Vector, scale: number): Vector {
 }
 
 /**
- * TODO:
+ * Add two vectors (v1 + v2)
  */
 export function vector2Add(vector2A: Vector, vector2B: Vector): Vector {
   return toVector(raylib.symbols.Vector2Add(

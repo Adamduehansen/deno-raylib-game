@@ -1,6 +1,16 @@
-import { Rectangle, toRaylibRectangle } from "./math.ts";
 import { Color, toRaylibColor, toRaylibVector2, Vector } from "./r-core.ts";
 import { raylib } from "./raylib-bindings.ts";
+
+export interface Rectangle {
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+}
+
+export function toRaylibRectangle(rec: Rectangle): BufferSource {
+  return new Float32Array([rec.x, rec.y, rec.width, rec.height]);
+}
 
 // ----------------------------------------------------------------------------
 // Basic shapes drawing functions
