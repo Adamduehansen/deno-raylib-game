@@ -88,11 +88,11 @@ export default abstract class Scene {
 
   /**
    * Called on each tick of the game.
-   *
-   * @param game the current instance of the game.
    */
-  // deno-lint-ignore no-unused-vars
   onUpdate(game: Game): void {
+    for (const entity of this.entityManager.entities) {
+      entity.update(game);
+    }
   }
 
   /**

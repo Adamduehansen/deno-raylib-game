@@ -1,3 +1,4 @@
+import Game from "./game.ts";
 import Graphic from "./graphics.ts";
 import { vec } from "./math.ts";
 import Scene from "./scene.ts";
@@ -8,7 +9,8 @@ export default abstract class Entity {
   readonly id = entityIdentifier++;
   readonly name?: string;
 
-  pos = vec(0, 0);
+  velocity = vec(0, 0);
+  position = vec(0, 0);
 
   // Graphic stuff
   // --------------------------------------------------------------------------
@@ -40,12 +42,18 @@ export default abstract class Entity {
   // deno-lint-ignore no-unused-vars
   onRemoved(scene: Scene): void {}
 
+  // deno-lint-ignore no-unused-vars
+  update(game: Game): void {
+    this.position.x += this.velocity.x;
+    this.position.y += this.velocity.y;
+  }
+
   render(): void {
     const currentGraphic = this._graphicsMap.get(this._currentGraphicKey);
     if (currentGraphic === undefined) {
       return;
     }
 
-    currentGraphic.render(this.pos);
+    currentGraphic.render(this.position);
   }
 }

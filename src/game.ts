@@ -1,3 +1,4 @@
+import Input from "./input.ts";
 import {
   closeWindow,
   getScreenHeight,
@@ -42,7 +43,8 @@ export default class Game {
   private _scenes: SceneFactory;
   private _currentScene: Scene;
 
-  readonly window: Window;
+  readonly window = new Window();
+  readonly input = new Input();
 
   constructor(args: GameArgs) {
     this._title = args.title;
@@ -52,8 +54,6 @@ export default class Game {
     this._resourceManager = args.resourceManager;
     this._scenes = args.scenes;
     this._currentScene = args.scenes[args.currentScene];
-
-    this.window = new Window();
   }
 
   /**

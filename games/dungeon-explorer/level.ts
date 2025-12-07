@@ -311,7 +311,7 @@ export default class LevelScene extends Scene {
   override onInitialize(game: Game): void {
     for (let index = 0; index < 4; index++) {
       const floor = new Floor();
-      floor.pos.x = 8 * index;
+      floor.position.x = 8 * index;
       this.entityManager.add(floor);
     }
 
@@ -319,8 +319,8 @@ export default class LevelScene extends Scene {
 
     this.camera = {
       target: {
-        x: this._player.pos.x,
-        y: this._player.pos.y,
+        x: this._player.position.x,
+        y: this._player.position.y,
       },
       offset: {
         x: game.window.width / 2,
@@ -335,8 +335,8 @@ export default class LevelScene extends Scene {
     super.onUpdate(game);
 
     this.camera.target = {
-      x: this._player.pos.x,
-      y: this._player.pos.y,
+      x: this._player.position.x,
+      y: this._player.position.y,
     };
   }
 }
