@@ -1,16 +1,11 @@
 import {
-  beginDrawing,
-  clearBackground,
   closeWindow,
-  endDrawing,
   getScreenHeight,
   getScreenWidth,
   initWindow,
-  RayWhite,
   setTargetFPS,
   windowShouldClose,
 } from "./r-core.ts";
-import { drawFPS } from "./r-text.ts";
 import { ResourceManager } from "./resource.ts";
 import Scene from "./scene.ts";
 
@@ -91,13 +86,7 @@ export default class Game {
 
       // Render
       // ======================================================================
-      beginDrawing();
-      clearBackground(RayWhite);
-
       this._currentScene.onRender();
-
-      drawFPS(0, 0);
-      endDrawing();
     }
   }
 

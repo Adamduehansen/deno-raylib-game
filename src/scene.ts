@@ -1,5 +1,15 @@
 import Entity from "./entity.ts";
 import Game from "./game.ts";
+import {
+  beginDrawing,
+  beginMode2D,
+  Camera,
+  clearBackground,
+  endDrawing,
+  endMode2D,
+  RayWhite,
+} from "./r-core.ts";
+import { drawFPS } from "./r-text.ts";
 
 class EntityManager {
   private _entities: Entity[] = [];
@@ -44,8 +54,22 @@ class EntityManager {
   }
 }
 
+const DefaultCamera: Camera = {
+  target: {
+    x: 0,
+    y: 0,
+  },
+  offset: {
+    x: 0,
+    y: 0,
+  },
+  rotation: 0,
+  zoom: 1,
+};
+
 export default abstract class Scene {
   protected entityManager = new EntityManager(this);
+  protected camera = DefaultCamera;
 
   /**
    * Called once when the scene is added to the game. USe this to setup entities
@@ -75,8 +99,16 @@ export default abstract class Scene {
    * Called on each tick of the game.
    */
   onRender(): void {
+    beginDrawing();
+    clearBackground(RayWhite);
+
+    beginMode2D(this.camera);
     for (const entity of this.entityManager.entities) {
       entity.render();
     }
+    endMode2D();
+
+    drawFPS(0, 0);
+    endDrawing();
   }
 }

@@ -22,8 +22,9 @@
 // import Inventory from "./inventory.ts";
 
 import Scene from "@src/scene.ts";
-import Game from "../../src/game.ts";
+import Game from "@src/game.ts";
 import Player from "./player.ts";
+import Floor from "./floor.ts";
 
 // interface FactoryEntityProps {
 //   position: Vector;
@@ -308,13 +309,34 @@ export default class LevelScene extends Scene {
   private _player = new Player();
 
   override onInitialize(game: Game): void {
-    console.log("Initializing level scene!");
-
-    this._player.pos = {
-      x: game.window.width / 2,
-      y: game.window.height / 2,
-    };
+    for (let index = 0; index < 4; index++) {
+      const floor = new Floor();
+      floor.pos.x = 8 * index;
+      this.entityManager.add(floor);
+    }
 
     this.entityManager.add(this._player);
+
+    this.camera = {
+      target: {
+        x: this._player.pos.x,
+        y: this._player.pos.y,
+      },
+      offset: {
+        x: game.window.width / 2,
+        y: game.window.height / 2,
+      },
+      rotation: 0,
+      zoom: 4,
+    };
+  }
+
+  override onUpdate(game: Game): void {
+    super.onUpdate(game);
+
+    this.camera.target = {
+      x: this._player.pos.x,
+      y: this._player.pos.y,
+    };
   }
 }
