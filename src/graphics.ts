@@ -41,8 +41,10 @@ export class Sprite implements Graphic {
 
 interface SpriteSheetArgs {
   sprites: Sprite[];
-  rows?: number;
-  columns?: number;
+  rows: number;
+  columns: number;
+  spriteWidth: number;
+  spriteHeight: number;
 }
 
 interface GridArgs {
@@ -57,11 +59,15 @@ export class SpriteSheet {
   readonly sprites: Sprite[];
   readonly rows: number;
   readonly columns: number;
+  readonly spriteWidth: number;
+  readonly spriteHeight: number;
 
   constructor(args: SpriteSheetArgs) {
     this.sprites = args.sprites;
-    this.rows = args.rows ?? 1;
-    this.columns = args.columns ?? this.sprites.length;
+    this.rows = args.rows;
+    this.columns = args.columns;
+    this.spriteWidth = args.spriteWidth;
+    this.spriteHeight = args.spriteHeight;
   }
 
   getSprite(x: number, y: number): Sprite {
@@ -91,6 +97,8 @@ export class SpriteSheet {
       sprites: sprites,
       columns: grid.columns,
       rows: grid.rows,
+      spriteWidth: grid.spriteWidth,
+      spriteHeight: grid.spriteHeight,
     });
   }
 }

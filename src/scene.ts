@@ -3,11 +3,11 @@ import Game from "./game.ts";
 import {
   beginDrawing,
   beginMode2D,
+  Black,
   Camera,
   clearBackground,
   endDrawing,
   endMode2D,
-  RayWhite,
 } from "./r-core.ts";
 import { drawFPS } from "./r-text.ts";
 import ScreenElement from "./screen-element.ts";
@@ -115,7 +115,7 @@ export default abstract class Scene {
    */
   onRender(): void {
     beginDrawing();
-    clearBackground(RayWhite);
+    clearBackground(Black);
 
     beginMode2D(this.camera);
     for (const entity of this.entityManager.entities) {

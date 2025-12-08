@@ -1,18 +1,6 @@
 import Entity from "@src/entity.ts";
-import { Resources } from "./resources.ts";
-import { SpriteSheet } from "@src/graphics.ts";
 import Game from "@src/game.ts";
-
-const spriteSheet = SpriteSheet.fromImage(Resources.spriteSheet, {
-  columns: 16,
-  rows: 10,
-  spriteHeight: 8,
-  spriteWidth: 8,
-  spacing: {
-    x: 1,
-    y: 1,
-  },
-});
+import spriteSheet from "./spriteSheet.ts";
 
 const PLAYER_SPEED = 2;
 
