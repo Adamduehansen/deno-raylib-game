@@ -1,3 +1,4 @@
+import Body, { RectangleBody } from "./body.ts";
 import Game from "./game.ts";
 import Graphic from "./graphics.ts";
 import { vec } from "./math.ts";
@@ -11,6 +12,8 @@ export default abstract class Entity {
 
   velocity = vec(0, 0);
   position = vec(0, 0);
+
+  body: Body | null;
 
   // Graphic stuff
   // --------------------------------------------------------------------------
@@ -29,6 +32,10 @@ export default abstract class Entity {
     this.currentGraphicKey = key;
   }
   // --------------------------------------------------------------------------
+
+  constructor() {
+    this.body = new RectangleBody(8, 8);
+  }
 
   /**
    * Called once the entity is added to a scene.
@@ -50,6 +57,11 @@ export default abstract class Entity {
   update(game: Game): void {
     this.position.x += this.velocity.x;
     this.position.y += this.velocity.y;
+
+    // Post update
+    if (this.body !== null) {
+      this.body.update(this.position);
+    }
   }
 
   // deno-lint-ignore no-unused-vars
@@ -60,5 +72,10 @@ export default abstract class Entity {
     }
 
     currentGraphic.render(this.position);
+
+    // Post draw
+    if (this.body !== null) {
+      this.body.render();
+    }
   }
 }

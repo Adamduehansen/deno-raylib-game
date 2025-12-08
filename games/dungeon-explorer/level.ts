@@ -29,6 +29,9 @@ class EntityFactory {
     const wall = new Wall();
     wall.addGraphic("wall", sprite);
     wall.useGraphic("wall");
+    if (spriteId === "70" || spriteId === "69" || spriteId === "85") {
+      wall.body = null;
+    }
     wall.position = vec(args.x, args.y);
     return wall;
   }
