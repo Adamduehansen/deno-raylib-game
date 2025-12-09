@@ -29,8 +29,16 @@ export default class Entity {
     this.graphicsMap.set(key, graphic);
   }
 
-  useGraphic(key: string): void {
-    this.currentGraphicKey = key;
+  useGraphic(graphic: Graphic): void;
+  useGraphic(key: string): void;
+  useGraphic(value: string | Graphic): void {
+    if (typeof value === "string") {
+      this.currentGraphicKey = value;
+    } else {
+      this.graphicsMap.clear();
+      this.graphicsMap.set("default", value);
+      this.useGraphic("default");
+    }
   }
   // --------------------------------------------------------------------------
 

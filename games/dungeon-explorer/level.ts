@@ -24,8 +24,7 @@ class EntityFactory {
     }
 
     const wall = new Entity();
-    wall.addGraphic("wall", sprite);
-    wall.useGraphic("wall");
+    wall.useGraphic(sprite);
     if (spriteId === "70" || spriteId === "69") {
       wall.body = null;
     }
