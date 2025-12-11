@@ -4,7 +4,7 @@ import {
   drawCircleLinesV,
   drawCircleV,
   drawRectangleLinesEx,
-  Rectangle,
+  RaylibRectangle,
 } from "@src/r-shapes.ts";
 
 interface Circle {
@@ -12,7 +12,7 @@ interface Circle {
   radius: number;
 }
 
-type ColliderType = Rectangle | Circle;
+type ColliderType = RaylibRectangle | Circle;
 
 type CollisionType = "passive" | "active";
 
@@ -65,7 +65,7 @@ export class RectangleBody extends Body {
     });
   }
 
-  override getCollider(): Rectangle {
+  override getCollider(): RaylibRectangle {
     // The width and the height is subtracted from this.pos since it is the center
     // of the collider.
     return {

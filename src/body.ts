@@ -1,9 +1,15 @@
 import { vec } from "./math.ts";
 import { Green, Red, Vector } from "./r-core.ts";
-import { drawCircleV, drawRectangleLinesEx, Rectangle } from "./r-shapes.ts";
+import {
+  drawCircleV,
+  drawRectangleLinesEx,
+  RaylibRectangle,
+} from "./r-shapes.ts";
 
 export default abstract class Body<TBodyType = unknown> {
   protected position: Vector = vec(0, 0);
+
+  collisionType: "prevent" | "passive" | "fixed" | "active" = "prevent";
 
   abstract clone(): TBodyType;
   abstract update(position: Vector): void;
@@ -11,18 +17,18 @@ export default abstract class Body<TBodyType = unknown> {
   abstract getBounds(): TBodyType;
 }
 
-export class RectangleBody extends Body<Rectangle> {
+export class RectangleBody extends Body<RaylibRectangle> {
   constructor(readonly width: number, readonly height: number) {
     super();
   }
 
-  override clone(): Rectangle {
+  override clone(): RaylibRectangle {
     return {
       ...this.getBounds(),
     };
   }
 
-  override getBounds(): Rectangle {
+  override getBounds(): RaylibRectangle {
     return {
       ...this.position,
       height: this.height,

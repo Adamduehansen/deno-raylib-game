@@ -1,4 +1,4 @@
-import { Rectangle } from "@src/r-shapes.ts";
+import { RaylibRectangle } from "@src/r-shapes.ts";
 import {
   closeAudioDevice,
   initAudioDevice,
@@ -81,7 +81,7 @@ abstract class Entity {
     this.world?.entityManager.remove(this);
   }
 
-  getRect(): Rectangle {
+  getRect(): RaylibRectangle {
     return {
       x: this.pos.x,
       y: this.pos.y,

@@ -35,7 +35,7 @@ import {
   drawRectangleRec,
 } from "@src/r-shapes.ts";
 import { drawText } from "@src/r-text.ts";
-import { Rectangle } from "@src/r-shapes.ts";
+import { RaylibRectangle } from "@src/r-shapes.ts";
 
 const maxBuildings = 100;
 
@@ -48,13 +48,13 @@ initWindow({
   title: "raylib [core] example - 2d camera",
 });
 
-const player: Rectangle = {
+const player: RaylibRectangle = {
   x: 400,
   y: 280,
   width: 40,
   height: 40,
 };
-const buildings: Rectangle[] = [];
+const buildings: RaylibRectangle[] = [];
 const buildColors: Color[] = [];
 
 let spacing = 0;
@@ -62,7 +62,7 @@ let spacing = 0;
 for (let i = 0; i < maxBuildings; i++) {
   const height = getRandomValue(100, 800);
   const width = getRandomValue(50, 200);
-  const building: Rectangle = {
+  const building: RaylibRectangle = {
     height: height,
     width: width,
     x: -6000 + spacing,

@@ -9,7 +9,7 @@ import {
   toRaylibVector2,
   Vector,
 } from "./r-core.ts";
-import { Rectangle, toRaylibRectangle } from "./r-shapes.ts";
+import { RaylibRectangle, toRaylibRectangle } from "./r-shapes.ts";
 
 //-----------------------------------------------------------------------------
 // Converters
@@ -101,8 +101,8 @@ export function setTextureFilter(texture: RaylibTexture, filter: number): void {
  */
 export function drawTexturePro(args: {
   texture: RaylibTexture;
-  source: Rectangle;
-  dest: Rectangle;
+  source: RaylibRectangle;
+  dest: RaylibRectangle;
   origin: Vector;
   rotation: number;
   tint: Color;
@@ -169,7 +169,7 @@ export function drawTexture(args: {
  */
 export function drawTextureRec(args: {
   texture: RaylibTexture;
-  rectangle: Rectangle;
+  rectangle: RaylibRectangle;
   vector: Vector;
   color: Color;
 }): void {

@@ -1,6 +1,6 @@
-import { Vector, White } from "./r-core.ts";
+import { Red, Vector, White } from "./r-core.ts";
 import { drawTextureRec } from "./r-textures.ts";
-import { Rectangle } from "./r-shapes.ts";
+import { drawRectangleRec, RaylibRectangle } from "./r-shapes.ts";
 import { Image } from "./resource.ts";
 import { vec } from "./math.ts";
 
@@ -10,12 +10,12 @@ export default interface Graphic {
 
 interface SpriteArgs {
   image: Image;
-  sourceView: Rectangle;
+  sourceView: RaylibRectangle;
 }
 
 export class Sprite implements Graphic {
   readonly image: Image;
-  readonly sourceView: Rectangle;
+  readonly sourceView: RaylibRectangle;
 
   constructor(args: SpriteArgs) {
     this.image = args.image;
@@ -36,6 +36,19 @@ export class Sprite implements Graphic {
       ),
       rectangle: this.sourceView,
     });
+  }
+}
+
+export class Rectangle implements Graphic {
+  constructor(readonly width: number, readonly height: number) {}
+
+  render(pos: Vector): void {
+    drawRectangleRec({
+      x: pos.x - this.width / 2,
+      y: pos.y - this.height / 2,
+      width: this.width,
+      height: this.height,
+    }, Red);
   }
 }
 

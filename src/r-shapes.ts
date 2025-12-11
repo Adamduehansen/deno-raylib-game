@@ -1,14 +1,14 @@
 import { Color, toRaylibColor, toRaylibVector2, Vector } from "./r-core.ts";
 import { raylib } from "./raylib-bindings.ts";
 
-export interface Rectangle {
+export interface RaylibRectangle {
   x: number;
   y: number;
   width: number;
   height: number;
 }
 
-export function toRaylibRectangle(rec: Rectangle): BufferSource {
+export function toRaylibRectangle(rec: RaylibRectangle): BufferSource {
   return new Float32Array([rec.x, rec.y, rec.width, rec.height]);
 }
 
@@ -123,7 +123,10 @@ export function drawRectangleLines(args: {
 /**
  * Draw a color-filled rectangle.
  */
-export function drawRectangleRec(rectangle: Rectangle, color: Color): void {
+export function drawRectangleRec(
+  rectangle: RaylibRectangle,
+  color: Color,
+): void {
   raylib.symbols.DrawRectangleRec(
     toRaylibRectangle(rectangle),
     toRaylibColor(color),
@@ -149,7 +152,7 @@ export function drawRectangleV(
  * Draw rectangle outline with extended parameters.
  */
 export function drawRectangleLinesEx(args: {
-  rec: Rectangle;
+  rec: RaylibRectangle;
   lineThick: number;
   color: Color;
 }): void {
@@ -167,7 +170,10 @@ export function drawRectangleLinesEx(args: {
 /**
  * Check collision between two rectangles.
  */
-export function checkCollisionRecs(rec1: Rectangle, rec2: Rectangle): boolean {
+export function checkCollisionRecs(
+  rec1: RaylibRectangle,
+  rec2: RaylibRectangle,
+): boolean {
   return raylib.symbols.CheckCollisionRecs(
     toRaylibRectangle(rec1),
     toRaylibRectangle(rec2),
@@ -180,7 +186,7 @@ export function checkCollisionRecs(rec1: Rectangle, rec2: Rectangle): boolean {
 export function checkCollisionCircleRec(
   vector: Vector,
   radius: number,
-  rectangle: Rectangle,
+  rectangle: RaylibRectangle,
 ): boolean {
   return raylib.symbols.CheckCollisionCircleRec(
     toRaylibVector2(vector),

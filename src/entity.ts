@@ -1,20 +1,33 @@
 import Body, { RectangleBody } from "./body.ts";
 import Game from "./game.ts";
-import Graphic from "./graphics.ts";
+import Graphic, { Rectangle } from "./graphics.ts";
 import { vec } from "./math.ts";
+import { Blank, Color, Vector } from "./r-core.ts";
 import { checkCollisionRecs } from "./r-shapes.ts";
 import Scene from "./scene.ts";
 
 let entityIdentifier = 0;
 
+interface EntityArgs {
+  width?: number;
+  height?: number;
+  position?: Vector;
+  color?: Color;
+  body?: Body;
+}
+
 export default class Entity {
   readonly id = entityIdentifier++;
   readonly name?: string;
 
-  velocity = vec(0, 0);
-  position = vec(0, 0);
+  readonly width: number;
+  readonly height: number;
 
-  body: Body | null = null;
+  velocity = vec(0, 0);
+  position: Vector;
+  color: Color;
+
+  body: Body;
 
   // Graphic stuff
   // --------------------------------------------------------------------------
@@ -23,6 +36,16 @@ export default class Entity {
 
   get currentGraphic(): Graphic | undefined {
     return this.graphicsMap.get(this.currentGraphicKey);
+  }
+
+  constructor(args?: EntityArgs) {
+    this.width = args?.width ?? 0;
+    this.height = args?.height ?? 0;
+    this.position = args?.position ?? vec(0, 0);
+    this.color = args?.color ?? Blank;
+    this.body = args?.body ?? new RectangleBody(this.width, this.height);
+
+    this.useGraphic(new Rectangle(this.width, this.height));
   }
 
   addGraphic(key: string, graphic: Graphic): void {
@@ -58,16 +81,26 @@ export default class Entity {
   // deno-lint-ignore no-unused-vars
   onRemoved(scene: Scene): void {}
 
+  /**
+   * Called when the collision starts.
+   */
+  // deno-lint-ignore no-unused-vars
+  onCollisionStart(scene: Scene): void {}
+
+  /**
+   * Called when the collision ends.
+   */
+  // deno-lint-ignore no-unused-vars
+  onCollisionEnd(scene: Scene): void {}
+
   // deno-lint-ignore no-unused-vars
   update(scene: Scene, game: Game): void {
     // Calculate new position
-    const oldX = this.position.x;
-    const oldY = this.position.y;
+    const _oldX = this.position.x;
+    const _oldY = this.position.y;
 
     const newX = this.position.x + this.velocity.x;
     const newY = this.position.y + this.velocity.y;
-
-    let updatePosition = true;
 
     // Check for collision
     for (const other of scene.entityManager.entities) {
@@ -87,21 +120,25 @@ export default class Entity {
         continue;
       }
 
+      if (other.body.collisionType === "prevent") {
+        continue;
+      }
+
+      if (this.body.collisionType === "prevent") {
+        continue;
+      }
+
       const newBody = this.body.clone();
       newBody.x = newX - newBody.width / 2;
       newBody.y = newY - newBody.height / 2;
 
       if (checkCollisionRecs(newBody, other.body.getBounds())) {
-        updatePosition = false;
+        this.onCollisionStart(scene);
         break;
       }
     }
 
-    if (updatePosition) {
-      this.position = vec(newX, newY);
-    } else {
-      this.position = vec(oldX, oldY);
-    }
+    this.position = vec(newX, newY);
 
     // Post update
     if (this.body !== null) {

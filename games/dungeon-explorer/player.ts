@@ -16,6 +16,14 @@ export default class Player extends Entity {
     this.body = new RectangleBody(8, 8);
   }
 
+  override onCollisionStart(_scene: Scene): void {
+    console.log("Collision starts");
+  }
+
+  override onCollisionEnd(_scene: Scene): void {
+    console.log("Collision end");
+  }
+
   override update(scene: Scene, game: Game): void {
     super.update(scene, game);
 
