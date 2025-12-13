@@ -1,4 +1,4 @@
-export * from "./src/core/r-audio.ts";
+export * as "r-audio" from "./src/core/r-audio.ts";
 export * from "./src/core/r-core.ts";
 export * from "./src/core/r-math.ts";
 export * from "./src/core/r-models.ts";
