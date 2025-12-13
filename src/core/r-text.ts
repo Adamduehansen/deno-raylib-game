@@ -1,9 +1,9 @@
 import {
-  Color,
+  type Color,
   toCString,
   toRaylibColor,
   toRaylibVector2,
-  Vector,
+  type Vector,
 } from "./r-core.ts";
 import { raylib } from "./raylib-bindings.ts";
 
@@ -20,7 +20,7 @@ export interface Font {
   glyphs: number; // pointer
 }
 
-export function toRaylibFont(font: Font) {
+export function toRaylibFont(font: Font): BufferSource {
   return new Uint32Array([
     font.baseSize,
     font.glyphCount,

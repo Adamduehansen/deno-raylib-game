@@ -1,11 +1,12 @@
 {
+  "name": "@adamduehansen/raylib-bindings",
+  "version": "0.1.0",
   "tasks": {
     "gemcatcher": "deno run --allow-ffi ./games/gem-catcher/main.ts",
     "gemcatcher:compile": "deno compile --allow-ffi --output ./bin/gem-catcher ./games/gem-catcher/main.ts"
   },
   "imports": {
-    "@libs/xml": "jsr:@libs/xml@^7.0.3",
-    "@src/": "./src/"
+    "@libs/xml": "jsr:@libs/xml@^7.0.3"
   },
   "compilerOptions": {
     "lib": [
@@ -18,5 +19,7 @@
       "ffi": true,
       "read": true
     }
-  }
+  },
+  "license": "MIT",
+  "exports": "./mod.ts"
 }

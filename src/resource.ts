@@ -1,6 +1,6 @@
-import { loadSound, RaylibSound, unloadSound } from "./r-audio.ts";
-import { RaylibTexture } from "./r-core.ts";
-import { loadTexture, unloadTexture } from "./r-textures.ts";
+import { loadSound, RaylibSound, unloadSound } from "./core/r-audio.ts";
+import { RaylibTexture } from "./core/r-core.ts";
+import { loadTexture, unloadTexture } from "./core/r-textures.ts";
 
 abstract class Resource<T = unknown> {
   resource?: T;
@@ -18,7 +18,6 @@ export class Image extends Resource<RaylibTexture> {
 
   unload(): void {
     if (this.resource === undefined) {
-      console.warn("Attempted to unload Texture but was not loaded.");
       return;
     }
 
@@ -33,7 +32,6 @@ export class Sound extends Resource<RaylibSound> {
 
   unload(): void {
     if (this.resource === undefined) {
-      console.warn("Attempted to unload Sound but was not loaded.");
       return;
     }
 

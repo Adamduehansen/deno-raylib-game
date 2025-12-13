@@ -265,7 +265,7 @@ export const MouseButtonLeft = 0;
 /**
  * Check if a mouse button is being pressed.
  */
-export function isMouseButtonDown(key: number) {
+export function isMouseButtonDown(key: number): boolean {
   return raylib.symbols.IsMouseButtonDown(key);
 }
 
@@ -414,4 +414,16 @@ export const GestureTap = 1;
  */
 export function isGestureDetected(gesture: number): boolean {
   return raylib.symbols.IsGestureDetected(gesture);
+}
+
+//-----------------------------------------------------------------------------
+// Color/pixel related functions
+//-----------------------------------------------------------------------------
+
+/**
+ * Get color with alpha applied, alpha goes from 0.0f to 1.0f.
+ */
+export function fade(color: Color, alpha: number): Color {
+  const result = raylib.symbols.Fade(toRaylibColor(color), alpha);
+  return [result[0], result[1], result[2], result[3]];
 }
